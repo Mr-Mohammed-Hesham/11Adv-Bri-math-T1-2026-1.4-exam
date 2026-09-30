@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>📈 امتحان الدوال - الصف 11 المتقدم | Functions Analysis</title>
-<meta name="description" content="امتحان تفاعلي شامل عن تحليل الدوال - التزايد والتناقص، معدل التغير، والقيم القصوى">
+<title>امتحان التحليل البياني للدوال - الصف 11 متقدم رياضيات</title>
+<meta name="description" content="امتحان تفاعلي شامل عن فترات التزايد والتناقص، متوسط معدل التغير، والقيم القصوى">
 <meta name="author" content="Mr. Mohammed Hesham">
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
@@ -26,7 +26,7 @@ body.en-mode { font-family: 'Inter', sans-serif; }
 position: fixed; top: 16px; left: 16px; z-index: 100;
 background: white; padding: 6px; border-radius: 30px;
 box-shadow: 0 4px 15px rgba(0,0,0,0.15); display: flex; gap: 4px;
-border: 2px solid #0d9488;
+border: 2px solid #7c3aed;
 }
 [dir="ltr"] .lang-switch { left: auto; right: 16px; }
 .lang-btn {
@@ -34,21 +34,32 @@ padding: 6px 14px; border-radius: 20px; cursor: pointer; font-weight: bold;
 transition: all 0.3s; border: none; font-size: 0.875rem;
 background: transparent; color: #6b7280;
 }
-.lang-btn.active { background: #0d9488; color: white; box-shadow: 0 2px 6px rgba(13,148,136,0.4); }
-.lang-btn:hover:not(.active) { background: #f0fdfa; color: #0d9488; }
+.lang-btn.active { background: #7c3aed; color: white; box-shadow: 0 2px 6px rgba(124,58,237,0.4); }
+.lang-btn:hover:not(.active) { background: #f5f3ff; color: #7c3aed; }
 .shuffle-badge {
 display: inline-block;
-background: linear-gradient(135deg, #0d9488, #0f766e);
-color: white; padding: 4px 12px; border-radius: 20px;
-font-size: 0.75rem; font-weight: bold; margin-right: 8px;
+background: linear-gradient(135deg, #7c3aed, #ec4899);
+color: white;
+padding: 4px 12px;
+border-radius: 20px;
+font-size: 0.75rem;
+font-weight: bold;
+margin-right: 8px;
+animation: pulse 2s infinite;
 }
 .math-display {
-display: inline-block; direction: ltr;
+display: inline-block;
+direction: ltr;
 font-family: 'Times New Roman', 'Cambria Math', serif;
-font-size: 1.15em; font-style: italic;
-padding: 2px 8px; background: #f0fdfa;
-border-radius: 6px; margin: 2px;
-color: #0f766e; font-weight: 600; letter-spacing: 0.5px;
+font-size: 1.2em;
+font-style: italic;
+padding: 2px 8px;
+background: #f5f3ff;
+border-radius: 6px;
+margin: 2px;
+color: #5b21b6;
+font-weight: 600;
+letter-spacing: 0.5px;
 }
 .save-indicator {
 position: fixed; bottom: 20px; left: 20px; z-index: 200;
@@ -59,91 +70,70 @@ box-shadow: 0 4px 12px rgba(16,185,129,0.4);
 }
 .save-indicator.show { opacity: 1; }
 .formula-box {
-background: #f0fdfa; border: 2px solid #14b8a6;
+background: #f5f3ff; border: 2px solid #a78bfa;
 border-radius: 8px; padding: 12px; margin: 10px 0;
 font-family: 'Times New Roman', serif;
 direction: ltr; text-align: center;
 }
-.svg-graph {
-display: block;
-margin: 12px auto;
-background: white;
-border: 2px solid #e5e7eb;
-border-radius: 12px;
-padding: 8px;
-box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-}
-.graph-container { text-align: center; margin: 10px 0; }
 </style>
 </head>
-<body class="bg-gradient-to-br from-teal-50 to-emerald-50 text-gray-800 p-4 md:p-8 min-h-screen">
-
+<body class="bg-gradient-to-br from-purple-50 to-pink-50 text-gray-800 p-4 md:p-8 min-h-screen">
 <div class="lang-switch no-print">
 <button class="lang-btn active" onclick="setLanguage('ar')" id="btn-ar">عربي</button>
 <button class="lang-btn" onclick="setLanguage('en')" id="btn-en">EN</button>
 </div>
-
 <div id="saveIndicator" class="save-indicator">💾 <span data-ar="تم الحفظ" data-en="Saved">تم الحفظ</span></div>
-
 <div id="timer-container" class="max-w-4xl mx-auto mb-4 text-center no-print">
-<div class="bg-white p-4 rounded-2xl shadow-md inline-block border-2 border-teal-100">
+<div class="bg-white p-4 rounded-2xl shadow-md inline-block border-2 border-purple-100">
 <span class="text-gray-600 ml-2" data-ar="⏰ الوقت المتبقي:" data-en="⏰ Time Remaining:">⏰ الوقت المتبقي:</span>
-<span id="timer" class="text-2xl font-bold text-teal-600 font-mono">60:00</span>
-<span class="shuffle-badge" data-ar="🎲 أسئلة عشوائية" data-en="🎲 Random Questions"> أسئلة عشوائية</span>
+<span id="timer" class="text-2xl font-bold text-purple-600 font-mono">60:00</span>
+<span class="shuffle-badge" data-ar="🎲 أسئلة عشوائية" data-en="🎲 Random Questions">🎲 أسئلة عشوائية</span>
 </div>
 </div>
-
 <div class="max-w-4xl mx-auto mb-6 flex flex-wrap gap-3 justify-center no-print">
-<button onclick="toggleAnswers()" class="bg-teal-600 hover:bg-teal-700 text-white px-5 py-2 rounded-xl font-medium transition shadow cursor-pointer" data-ar="👀 إظهار / إخفاء الإجابات" data-en="👀 Show / Hide Answers">👀 إظهار / إخفاء الإجابات</button>
+<button onclick="toggleAnswers()" class="bg-purple-600 hover:bg-purple-700 text-white px-5 py-2 rounded-xl font-medium transition shadow cursor-pointer" data-ar="👀 إظهار / إخفاء الإجابات" data-en="👀 Show / Hide Answers">👀 إظهار / إخفاء الإجابات</button>
 <button onclick="window.print()" class="bg-gray-700 hover:bg-gray-900 text-white px-5 py-2 rounded-xl font-medium transition shadow cursor-pointer" data-ar="🖨️ طباعة" data-en="🖨️ Print">🖨️ طباعة</button>
-<button onclick="reshuffleExam()" class="bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white px-5 py-2 rounded-xl font-medium transition shadow cursor-pointer" data-ar="🔄 أسئلة جديدة" data-en="🔄 New Questions">🔄 أسئلة جديدة</button>
+<button onclick="reshuffleExam()" class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-5 py-2 rounded-xl font-medium transition shadow cursor-pointer" data-ar="🔄 أسئلة جديدة" data-en="🔄 New Questions">🔄 أسئلة جديدة</button>
 <button onclick="clearProgress()" class="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-xl font-medium transition shadow cursor-pointer" data-ar="🗑️ مسح التقدم" data-en="🗑️ Clear Progress">🗑️ مسح التقدم</button>
 </div>
-
-<header class="max-w-4xl mx-auto bg-white p-6 rounded-2xl shadow-lg mb-8 border-4 border-teal-400">
+<header class="max-w-4xl mx-auto bg-white p-6 rounded-2xl shadow-lg mb-8 border-4 border-purple-400">
 <div class="text-center">
-<h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2" data-ar="📈 تحليل الدوال: التزايد، التناقص، والقيم القصوى" data-en="📈 Function Analysis: Increasing, Decreasing & Extrema">📈 تحليل الدوال: التزايد، التناقص، والقيم القصوى</h1>
-<h2 class="text-lg text-teal-600 font-semibold" data-ar="الصف الحادي عشر المتقدم (رياضيات)" data-en="Grade 11 Advanced (Mathematics)">الصف الحادي عشر المتقدم (رياضيات)</h2>
-<p class="text-sm text-gray-600 mt-2" data-ar="فترات التزايد والتناقص، متوسط معدل التغير، والقيم القصوى المحلية" data-en="Increasing/decreasing intervals, average rate of change, and local extrema">فترات التزايد والتناقص، متوسط معدل التغير، والقيم القصوى المحلية</p>
+<h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2" data-ar="📊 التحليل البياني للدوال" data-en="📊 Graphical Analysis of Functions">📊 التحليل البياني للدوال</h1>
+<h2 class="text-lg text-purple-600 font-semibold" data-ar="الصف الحادي عشر المتقدم (رياضيات)" data-en="Grade 11 Advanced (Mathematics)">الصف الحادي عشر المتقدم (رياضيات)</h2>
+<p class="text-sm text-gray-600 mt-2" data-ar="فترات التزايد والتناقص، متوسط معدل التغير، القيم القصوى المحلية والمطلقة" data-en="Increasing/Decreasing intervals, Average Rate of Change, Local & Absolute Extrema">فترات التزايد والتناقص، متوسط معدل التغير، القيم القصوى المحلية والمطلقة</p>
 <p class="text-xs text-green-600 mt-2 font-semibold" data-ar="💾 يتم حفظ تقدمك تلقائياً - 20 سؤالاً في 5 أقسام" data-en="💾 Your progress is saved automatically - 20 questions in 5 sections">💾 يتم حفظ تقدمك تلقائياً - 20 سؤالاً في 5 أقسام</p>
 </div>
 <div class="mt-4 flex flex-wrap justify-center gap-4 text-sm text-gray-600">
-<span><span data-ar="📅 التاريخ:" data-en="📅 Date:">📅 التاريخ:</span> <input type="text" id="examDate" class="border-b-2 border-teal-300 bg-transparent w-28 text-center"></span>
-<span><span data-ar="😊 الاسم:" data-en="😊 Name:">😊 الاسم:</span> <input type="text" id="studentName" class="border-b-2 border-teal-300 bg-transparent w-32 text-center" placeholder="اكتب اسمك"></span>
-<span><span data-ar="🏫 الشعبة:" data-en="🏫 Class:">🏫 الشعبة:</span> <input type="text" id="studentClass" class="border-b-2 border-teal-300 bg-transparent w-28 text-center" placeholder="الشعبة"></span>
-<span><span data-ar=" المدة: 60 دقيقة" data-en="⏰ Duration: 60 min"> المدة: 60 دقيقة</span></span>
-<span><span data-ar="📊 المجموع: 100 درجة" data-en=" Total: 100 pts"> المجموع: 100 درجة</span></span>
+<span><span data-ar="📅 التاريخ:" data-en="📅 Date:">📅 التاريخ:</span> <input type="text" id="examDate" class="border-b-2 border-purple-300 bg-transparent w-28 text-center"></span>
+<span><span data-ar="😊 الاسم:" data-en="😊 Name:">😊 الاسم:</span> <input type="text" id="studentName" class="border-b-2 border-purple-300 bg-transparent w-32 text-center" placeholder="اكتب اسمك"></span>
+<span><span data-ar="🏫 الشعبة:" data-en="🏫 Class:">🏫 الشعبة:</span> <input type="text" id="studentClass" class="border-b-2 border-purple-300 bg-transparent w-28 text-center" placeholder="الشعبة"></span>
+<span><span data-ar="⏰ المدة: 60 دقيقة" data-en="⏰ Duration: 60 min">⏰ المدة: 60 دقيقة</span></span>
+<span><span data-ar="📊 المجموع: 100 درجة" data-en="📊 Total: 100 pts">📊 المجموع: 100 درجة</span></span>
 </div>
 </header>
-
-<div class="max-w-4xl mx-auto mb-6 bg-white p-4 rounded-xl shadow-md border-2 border-teal-200 no-print">
-<h3 class="font-bold text-lg mb-3 text-teal-700 text-center" data-ar=" القوانين الأساسية" data-en="📐 Key Formulas">📐 القوانين الأساسية</h3>
+<div class="max-w-4xl mx-auto mb-6 bg-white p-4 rounded-xl shadow-md border-2 border-purple-200 no-print">
+<h3 class="font-bold text-lg mb-3 text-purple-700 text-center" data-ar="📐 القوانين الأساسية" data-en="📐 Key Formulas">📐 القوانين الأساسية</h3>
 <div class="grid md:grid-cols-2 gap-3 text-sm">
-<div class="formula-box"><strong>Average Rate of Change:</strong> ARC = [f(b) - f(a)] / (b - a)</div>
-<div class="formula-box"><strong>Critical Points:</strong> f'(x) = 0 or undefined</div>
-<div class="formula-box"><strong>Increasing:</strong> f'(x) &gt; 0</div>
-<div class="formula-box"><strong>Decreasing:</strong> f'(x) &lt; 0</div>
-<div class="formula-box"><strong>Local Max:</strong> f' changes + to −</div>
-<div class="formula-box"><strong>Local Min:</strong> f' changes − to +</div>
+<div class="formula-box"><strong data-ar="متوسط معدل التغير:" data-en="Average Rate of Change:">متوسط معدل التغير:</strong> ARC = [f(b) - f(a)] / (b - a)</div>
+<div class="formula-box"><strong data-ar="فترة التزايد:" data-en="Increasing Interval:">فترة التزايد:</strong> f'(x) > 0</div>
+<div class="formula-box"><strong data-ar="فترة التناقص:" data-en="Decreasing Interval:">فترة التناقص:</strong> f'(x) < 0</div>
+<div class="formula-box"><strong data-ar="القيم الحرجة:" data-en="Critical Values:">القيم الحرجة:</strong> f'(x) = 0</div>
 </div>
 </div>
-
 <main class="max-w-4xl mx-auto space-y-8" id="exam-content"></main>
-
 <div class="text-center no-print pb-8 mt-8">
-<button onclick="gradeExam()" class="bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white text-lg px-10 py-4 rounded-2xl font-bold shadow-xl transition transform hover:scale-105 cursor-pointer" data-ar="🎯 صحح إجاباتي!" data-en="🎯 Grade My Answers!">🎯 صحح إجاباتي!</button>
+<button onclick="gradeExam()" class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white text-lg px-10 py-4 rounded-2xl font-bold shadow-xl transition transform hover:scale-105 cursor-pointer" data-ar="🎯 صحح إجاباتي!" data-en="🎯 Grade My Answers!">🎯 صحح إجاباتي!</button>
 </div>
-
-<div id="results-panel" class="max-w-4xl mx-auto mt-8 bg-white p-8 rounded-2xl shadow-2xl border-4 border-teal-400 hidden no-print">
-<h2 class="text-3xl font-bold text-gray-900 mb-6 text-center" data-ar="🏆 نتيجتك يا بطل! 🏆" data-en="🏆 Your Results, Champion! 🏆">🏆 نتيجتك يا بطل! </h2>
+<div id="results-panel" class="max-w-4xl mx-auto mt-8 bg-white p-8 rounded-2xl shadow-2xl border-4 border-purple-400 hidden no-print">
+<h2 class="text-3xl font-bold text-gray-900 mb-6 text-center" data-ar="🏆 نتيجتك يا بطل! 🏆" data-en="🏆 Your Results, Champion! 🏆">🏆 نتيجتك يا بطل! 🏆</h2>
 <div class="grid md:grid-cols-3 gap-4 mb-6">
-<div class="bg-teal-50 p-4 rounded-xl text-center"><p data-ar="😊 الاسم" data-en="😊 Name">😊 الاسم</p><p id="res-name" class="font-bold text-xl text-teal-700">-</p></div>
-<div class="bg-emerald-50 p-4 rounded-xl text-center"><p data-ar=" التاريخ" data-en="📅 Date"> التاريخ</p><p id="res-date" class="font-bold text-xl text-emerald-700">-</p></div>
-<div class="bg-teal-50 p-4 rounded-xl text-center"><p data-ar="🌟 المجموع" data-en="🌟 Score">🌟 المجموع</p><p id="res-total" class="font-bold text-3xl text-teal-600">0 / 100</p></div>
+<div class="bg-purple-50 p-4 rounded-xl text-center"><p data-ar="😊 الاسم" data-en="😊 Name">😊 الاسم</p><p id="res-name" class="font-bold text-xl text-purple-700">-</p></div>
+<div class="bg-pink-50 p-4 rounded-xl text-center"><p data-ar="📅 التاريخ" data-en="📅 Date">📅 التاريخ</p><p id="res-date" class="font-bold text-xl text-pink-700">-</p></div>
+<div class="bg-purple-50 p-4 rounded-xl text-center"><p data-ar="🌟 المجموع" data-en="🌟 Score">🌟 المجموع</p><p id="res-total" class="font-bold text-3xl text-purple-600">0 / 100</p></div>
 </div>
 <div class="text-center mb-6">
 <span id="success-badge" class="success-badge grade-excellent">-</span>
-<p id="success-percent" class="text-4xl font-bold text-teal-600 mt-2">0%</p>
+<p id="success-percent" class="text-4xl font-bold text-purple-600 mt-2">0%</p>
 <p class="text-sm text-gray-500" data-ar="نسبة النجاح" data-en="Success Rate">نسبة النجاح</p>
 </div>
 <div class="bg-gray-50 p-6 rounded-xl mb-6">
@@ -151,640 +141,549 @@ box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 <div class="space-y-3" id="sections-performance"></div>
 </div>
 <div class="text-center mb-6">
-<button id="sendEmailBtn" onclick="sendResultsToEmail()" class="bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white text-lg px-8 py-3 rounded-2xl font-bold shadow-xl transition transform hover:scale-105 cursor-pointer" data-ar="📧 أرسل النتيجة للمعلم" data-en=" Send Results to Teacher">📧 أرسل النتيجة للمعلم</button>
+<button id="sendEmailBtn" onclick="sendResultsToEmail()" class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white text-lg px-8 py-3 rounded-2xl font-bold shadow-xl transition transform hover:scale-105 cursor-pointer" data-ar="📧 أرسل النتيجة للمعلم" data-en="📧 Send Results to Teacher">📧 أرسل النتيجة للمعلم</button>
 <p id="emailStatus" class="text-sm mt-2 text-center font-medium"></p>
 </div>
 <div class="flex gap-3 justify-center">
-<button onclick="window.print()" class="bg-gray-700 text-white px-6 py-3 rounded-xl font-semibold" data-ar="🖨️ طباعة النتيجة" data-en="️ Print Results">🖨️ طباعة النتيجة</button>
+<button onclick="window.print()" class="bg-gray-700 text-white px-6 py-3 rounded-xl font-semibold" data-ar="🖨️ طباعة النتيجة" data-en="🖨️ Print Results">🖨️ طباعة النتيجة</button>
 </div>
 </div>
-
 <footer class="max-w-4xl mx-auto mt-10 mb-8 text-center text-gray-500 text-sm no-print">
-© <span data-ar="تحليل الدوال - الصف 11 متقدم" data-en="Function Analysis - Grade 11 Advanced">تحليل الدوال - الصف 11 متقدم</span> | Mr. Mohammed Hesham 📈
+© <span data-ar="التحليل البياني للدوال - الصف 11 متقدم" data-en="Graphical Analysis of Functions - Grade 11 Advanced">التحليل البياني للدوال - الصف 11 متقدم</span> | Mr. Mohammed Hesham 📊
 </footer>
-
 <script>
 const PUBLIC_KEY = "Rb3Lq8tXaFmc5YHUH";
 const SERVICE_ID = "service_w15m64i";
 const TEMPLATE_ID = "template_5b0u2tq";
 const TARGET_EMAIL = "mohammedhesham872@gmail.com";
 emailjs.init(PUBLIC_KEY);
-
-const STORAGE_KEY = 'functions_analysis_grade11_exam_v1';
+const STORAGE_KEY = 'graphical_analysis_grade11_advanced_exam_v1';
 const TOTAL_TIME = 3600;
 const TOTAL_QUESTIONS = 20;
 const TOTAL_SECTIONS = 5;
 const QUESTIONS_PER_SECTION = 4;
-
 let currentSeed = null;
 let answersVisible = false;
 let saveIndicatorTimeout = null;
-
 function mulberry32(a) {
-    return function() {
-        var t = a += 0x6D2B79F5;
-        t = Math.imul(t ^ t >>> 15, t | 1);
-        t ^= t + Math.imul(t ^ t >>> 7, t | 61);
-        return ((t ^ t >>> 14) >>> 0) / 4294967296;
-    }
+return function() {
+var t = a += 0x6D2B79F5;
+t = Math.imul(t ^ t >>> 15, t | 1);
+t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+return ((t ^ t >>> 14) >>> 0) / 4294967296;
+}
 }
 let rng = null;
-
 function showSaveIndicator() {
-    const indicator = document.getElementById('saveIndicator');
-    indicator.classList.add('show');
-    if (saveIndicatorTimeout) clearTimeout(saveIndicatorTimeout);
-    saveIndicatorTimeout = setTimeout(() => indicator.classList.remove('show'), 1500);
+const indicator = document.getElementById('saveIndicator');
+indicator.classList.add('show');
+if (saveIndicatorTimeout) clearTimeout(saveIndicatorTimeout);
+saveIndicatorTimeout = setTimeout(() => indicator.classList.remove('show'), 1500);
 }
-
 function saveState(showIndicator = true) {
-    try {
-        const state = {
-            seed: currentSeed, lang: currentLang,
-            studentName: document.getElementById('studentName').value,
-            studentClass: document.getElementById('studentClass').value,
-            examDate: document.getElementById('examDate').value,
-            answers: getSelectedAnswers(),
-            timeRemaining: timeRemaining,
-            answersVisible: answersVisible, savedAt: Date.now()
-        };
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-        if (showIndicator) showSaveIndicator();
-    } catch (e) { console.error('Save error:', e); }
+try {
+const state = {
+seed: currentSeed, lang: currentLang,
+studentName: document.getElementById('studentName').value,
+studentClass: document.getElementById('studentClass').value,
+examDate: document.getElementById('examDate').value,
+answers: getSelectedAnswers(),
+timeRemaining: timeRemaining,
+answersVisible: answersVisible, savedAt: Date.now()
+};
+localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+if (showIndicator) showSaveIndicator();
+} catch (e) { console.error('خطأ في الحفظ:', e); }
 }
-
 function loadState() {
-    try {
-        const saved = localStorage.getItem(STORAGE_KEY);
-        return saved ? JSON.parse(saved) : null;
-    } catch (e) { return null; }
+try {
+const saved = localStorage.getItem(STORAGE_KEY);
+if (saved) return JSON.parse(saved);
+} catch (e) { console.error('خطأ في التحميل:', e); }
+return null;
 }
-
 function getSelectedAnswers() {
-    const answers = {};
-    for (let i = 0; i < TOTAL_QUESTIONS; i++) {
-        const selected = document.querySelector(`input[name="q${i}"]:checked`);
-        if (selected) answers[i] = selected.value;
-    }
-    return answers;
+const answers = {};
+for (let i = 0; i < TOTAL_QUESTIONS; i++) {
+const selected = document.querySelector(`input[name="q${i}"]:checked`);
+if (selected) answers[i] = selected.value;
 }
-
+return answers;
+}
 function restoreAnswers(answers) {
-    if (!answers) return;
-    for (const [idx, val] of Object.entries(answers)) {
-        const radio = document.querySelector(`input[name="q${idx}"][value="${val}"]`);
-        if (radio) radio.checked = true;
-    }
+if (!answers) return;
+for (const [idx, val] of Object.entries(answers)) {
+const radio = document.querySelector(`input[name="q${idx}"][value="${val}"]`);
+if (radio) radio.checked = true;
 }
-
+}
 function clearProgress() {
-    const msg = currentLang === 'ar' ? '⚠️ هل أنت متأكد من مسح كل التقدم؟' : '⚠️ Clear all progress?';
-    if (confirm(msg)) { localStorage.removeItem(STORAGE_KEY); location.reload(); }
+const confirmMsg = currentLang === 'ar' ? '⚠️ هل أنت متأكد من مسح كل التقدم؟' : '⚠️ Are you sure you want to clear all progress?';
+if (confirm(confirmMsg)) { localStorage.removeItem(STORAGE_KEY); location.reload(); }
 }
-
 function setupAnswerListeners() {
-    document.getElementById('exam-content').addEventListener('change', (e) => {
-        if (e.target.type === 'radio') saveState();
-    });
+document.getElementById('exam-content').addEventListener('change', (e) => {
+if (e.target.type === 'radio') saveState();
+});
 }
-
 function setupInputListeners() {
-    ['studentName', 'studentClass', 'examDate'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) {
-            el.addEventListener('input', () => saveState(false));
-            el.addEventListener('blur', () => saveState());
-        }
-    });
+['studentName', 'studentClass', 'examDate'].forEach(id => {
+const el = document.getElementById(id);
+if (el) {
+el.addEventListener('input', () => saveState(false));
+el.addEventListener('blur', () => saveState());
 }
-
-// ==================== SVG Diagrams ====================
-const svgGraphs = {
-    cubic_increasing: `<svg class="svg-graph" width="300" height="260" viewBox="0 0 300 260" xmlns="http://www.w3.org/2000/svg">
-        <rect x="5" y="5" width="290" height="250" rx="12" fill="#f0fdfa" stroke="#0d9488" stroke-width="2"/>
-        <text x="150" y="25" text-anchor="middle" font-size="13" fill="#0f766e" font-weight="bold">f(x) = x³ - x² - 2x + 3</text>
-        <line x1="30" y1="220" x2="280" y2="220" stroke="#374151" stroke-width="2"/>
-        <line x1="150" y1="40" x2="150" y2="220" stroke="#374151" stroke-width="2"/>
-        <path d="M 50 200 Q 80 100 110 130 T 170 80 T 250 60" fill="none" stroke="#0d9488" stroke-width="3"/>
-        <circle cx="110" cy="130" r="4" fill="#dc2626"/>
-        <circle cx="170" cy="80" r="4" fill="#dc2626"/>
-        <text x="150" y="245" text-anchor="middle" font-size="10" fill="#0f766e">↑ على (-∞,-0.7) و (1.5,∞) | ↓ على (-0.7,1.5)</text>
-    </svg>`,
-    cubic_decreasing: `<svg class="svg-graph" width="300" height="260" viewBox="0 0 300 260" xmlns="http://www.w3.org/2000/svg">
-        <rect x="5" y="5" width="290" height="250" rx="12" fill="#fef2f2" stroke="#dc2626" stroke-width="2"/>
-        <text x="150" y="25" text-anchor="middle" font-size="13" fill="#991b1b" font-weight="bold">f(x) = -x³ - 4x² + 2</text>
-        <line x1="30" y1="220" x2="280" y2="220" stroke="#374151" stroke-width="2"/>
-        <line x1="150" y1="40" x2="150" y2="220" stroke="#374151" stroke-width="2"/>
-        <path d="M 50 60 Q 80 200 110 180 T 170 130 T 250 200" fill="none" stroke="#dc2626" stroke-width="3"/>
-        <circle cx="110" cy="180" r="4" fill="#0d9488"/>
-        <circle cx="170" cy="130" r="4" fill="#0d9488"/>
-        <text x="150" y="245" text-anchor="middle" font-size="10" fill="#991b1b">↑ على (-2.67,0) | ↓ على (-∞,-2.67) و (0,∞)</text>
-    </svg>`,
-    rational_graph: `<svg class="svg-graph" width="300" height="260" viewBox="0 0 300 260" xmlns="http://www.w3.org/2000/svg">
-        <rect x="5" y="5" width="290" height="250" rx="12" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
-        <text x="150" y="25" text-anchor="middle" font-size="13" fill="#92400e" font-weight="bold">f(x) = (x-2)/x</text>
-        <line x1="30" y1="220" x2="280" y2="220" stroke="#374151" stroke-width="2"/>
-        <line x1="150" y1="40" x2="150" y2="220" stroke="#374151" stroke-width="2"/>
-        <line x1="150" y1="40" x2="150" y2="220" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4"/>
-        <path d="M 50 180 Q 100 140 140 130" fill="none" stroke="#f59e0b" stroke-width="3"/>
-        <path d="M 160 130 Q 200 140 250 180" fill="none" stroke="#f59e0b" stroke-width="3"/>
-        <text x="150" y="245" text-anchor="middle" font-size="10" fill="#92400e">↑ على (-∞,0) و (0,∞) | لا تناقص</text>
-    </svg>`,
-    piecewise_graph: `<svg class="svg-graph" width="300" height="260" viewBox="0 0 300 260" xmlns="http://www.w3.org/2000/svg">
-        <rect x="5" y="5" width="290" height="250" rx="12" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
-        <text x="150" y="25" text-anchor="middle" font-size="13" fill="#5b21b6" font-weight="bold">دالة متعددة التعريف</text>
-        <line x1="30" y1="220" x2="280" y2="220" stroke="#374151" stroke-width="2"/>
-        <line x1="150" y1="40" x2="150" y2="220" stroke="#374151" stroke-width="2"/>
-        <line x1="50" y1="180" x2="150" y2="80" stroke="#7c3aed" stroke-width="3"/>
-        <path d="M 170 130 Q 200 200 250 180" fill="none" stroke="#7c3aed" stroke-width="3"/>
-        <circle cx="150" cy="80" r="4" fill="#7c3aed"/>
-        <text x="150" y="245" text-anchor="middle" font-size="10" fill="#5b21b6">↑ على (-∞,-2] و (4,∞) | ↓ على (0,4)</text>
-    </svg>`,
-    arc_formula: `<svg class="svg-graph" width="340" height="180" viewBox="0 0 340 180" xmlns="http://www.w3.org/2000/svg">
-        <rect x="5" y="5" width="330" height="170" rx="12" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
-        <text x="170" y="30" text-anchor="middle" font-size="14" fill="#1e40af" font-weight="bold">📐 متوسط معدل التغير</text>
-        <text x="170" y="65" text-anchor="middle" font-size="16" fill="#1e40af" font-family="'Times New Roman', serif" font-weight="bold">ARC = [f(b) - f(a)] / (b - a)</text>
-        <text x="170" y="100" text-anchor="middle" font-size="11" fill="#1e40af">يمثل ميل القاطع بين النقطتين (a, f(a)) و (b, f(b))</text>
-        <text x="170" y="130" text-anchor="middle" font-size="11" fill="#1e40af">مثال: f(x) = x² + 3x - 4 على [-1, 3]</text>
-        <text x="170" y="150" text-anchor="middle" font-size="11" fill="#1e40af">ARC = [f(3) - f(-1)] / [3 - (-1)] = 20/4 = 5</text>
-        <text x="170" y="170" text-anchor="middle" font-size="10" fill="#1e40af">النتيجة: 5</text>
-    </svg>`,
-    extrema_formula: `<svg class="svg-graph" width="340" height="200" viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg">
-        <rect x="5" y="5" width="330" height="190" rx="12" fill="#fce7f3" stroke="#ec4899" stroke-width="2"/>
-        <text x="170" y="25" text-anchor="middle" font-size="14" fill="#9f1239" font-weight="bold">📈 القيم القصوى المحلية</text>
-        <text x="170" y="50" text-anchor="middle" font-size="12" fill="#9f1239">1. أوجد f'(x) = 0 (النقاط الحرجة)</text>
-        <text x="170" y="75" text-anchor="middle" font-size="12" fill="#9f1239">2. اختبر تغير إشارة f'(x)</text>
-        <text x="170" y="100" text-anchor="middle" font-size="12" fill="#9f1239">3. + إلى − = قيمة عظمى محلية</text>
-        <text x="170" y="125" text-anchor="middle" font-size="12" fill="#9f1239">4. − إلى + = قيمة صغرى محلية</text>
-        <text x="170" y="155" text-anchor="middle" font-size="11" fill="#9f1239" font-family="'Times New Roman', serif">مثال: f(x) = 3x³ - 6x² + 8</text>
-        <text x="170" y="175" text-anchor="middle" font-size="11" fill="#9f1239" font-family="'Times New Roman', serif">f'(x) = 9x² - 12x = 3x(3x-4) = 0</text>
-        <text x="170" y="192" text-anchor="middle" font-size="10" fill="#9f1239">x = 0 (عظمى) و x = 4/3 (صغرى)</text>
-    </svg>`
-};
-
+});
+}
 const originalExamData = {
-    sections: [
-        {
-            id: 'sec1',
-            title: { ar: '🔹 الجزء 1: فترات التزايد والتناقص (كثيرات الحدود)', en: '🔹 Part 1: Increasing/Decreasing (Polynomials)' },
-            questions: [
-                {
-                    q: { ar: 'ما فترات التزايد للدالة <span class="math-display">f(x) = x³ - x² - 2x + 3</span>؟', en: 'What are the increasing intervals of <span class="math-display">f(x) = x³ - x² - 2x + 3</span>?' },
-                    svg: svgGraphs.cubic_increasing,
-                    options: [
-                        { ar: '<span class="math-display">(-∞, -0.7) و (1.5, ∞)</span>', en: '<span class="math-display">(-∞, -0.7) and (1.5, )</span>' },
-                        { ar: '<span class="math-display">(-0.7, 1.5)</span>', en: '<span class="math-display">(-0.7, 1.5)</span>' },
-                        { ar: '<span class="math-display">(-∞, ∞)</span>', en: '<span class="math-display">(-∞, ∞)</span>' },
-                        { ar: '<span class="math-display">(-1, 2)</span>', en: '<span class="math-display">(-1, 2)</span>' }
-                    ],
-                    correct: 0,
-                    answer: { ar: 'f\'(x) = 3x² - 2x - 2 = 0 → x ≈ -0.7 و x ≈ 1.5. الدالة متزايدة خارج هاتين القيمتين', en: 'f\'(x) = 3x² - 2x - 2 = 0 → x ≈ -0.7 and x ≈ 1.5. Function increases outside these values' }
-                },
-                {
-                    q: { ar: 'ما فترات التناقص للدالة <span class="math-display">f(x) = -x³ - 4x² + 2</span>؟', en: 'What are the decreasing intervals of <span class="math-display">f(x) = -x³ - 4x² + 2</span>?' },
-                    svg: svgGraphs.cubic_decreasing,
-                    options: [
-                        { ar: '<span class="math-display">(-∞, -2.67) و (0, ∞)</span>', en: '<span class="math-display">(-∞, -2.67) and (0, ∞)</span>' },
-                        { ar: '<span class="math-display">(-2.67, 0)</span>', en: '<span class="math-display">(-2.67, 0)</span>' },
-                        { ar: '<span class="math-display">(-∞, 0)</span>', en: '<span class="math-display">(-∞, 0)</span>' },
-                        { ar: '<span class="math-display">(0, ∞)</span>', en: '<span class="math-display">(0, ∞)</span>' }
-                    ],
-                    correct: 0,
-                    answer: { ar: 'f\'(x) = -3x² - 8x = -x(3x+8) = 0 → x = 0 و x = -8/3 ≈ -2.67. متناقصة خارج الفترة (-2.67, 0)', en: 'f\'(x) = -3x² - 8x = -x(3x+8) = 0 → x = 0 and x = -8/3 ≈ -2.67. Decreasing outside (-2.67, 0)' }
-                },
-                {
-                    q: { ar: 'الدالة <span class="math-display">f(x) = x⁴ - 3x³ - x + 1</span> متزايدة على:', en: 'The function <span class="math-display">f(x) = x - 3x³ - x + 1</span> is increasing on:' },
-                    options: [
-                        { ar: '<span class="math-display">(2.5, ∞)</span>', en: '<span class="math-display">(2.5, ∞)</span>' },
-                        { ar: '<span class="math-display">(-∞, 0)</span>', en: '<span class="math-display">(-, 0)</span>' },
-                        { ar: '<span class="math-display">(0, 2.5)</span>', en: '<span class="math-display">(0, 2.5)</span>' },
-                        { ar: '<span class="math-display">(-∞, ∞)</span>', en: '<span class="math-display">(-∞, ∞)</span>' }
-                    ],
-                    correct: 0,
-                    answer: { ar: 'f\'(x) = 4x³ - 9x² - 1 = 0 → x ≈ 2.5. الدالة متزايدة لـ x > 2.5', en: 'f\'(x) = 4x³ - 9x² - 1 = 0 → x ≈ 2.5. Function increases for x > 2.5' }
-                },
-                {
-                    q: { ar: 'الدالة <span class="math-display">f(x) = -x⁵ + 3x³</span> متناقصة على:', en: 'The function <span class="math-display">f(x) = -x⁵ + 3x³</span> is decreasing on:' },
-                    options: [
-                        { ar: '<span class="math-display">(-∞, -1.34) و (1.34, )</span>', en: '<span class="math-display">(-∞, -1.34) and (1.34, ∞)</span>' },
-                        { ar: '<span class="math-display">(-1.34, 0) و (0, 1.34)</span>', en: '<span class="math-display">(-1.34, 0) and (0, 1.34)</span>' },
-                        { ar: '<span class="math-display">(-∞, )</span>', en: '<span class="math-display">(-∞, ∞)</span>' },
-                        { ar: '<span class="math-display">(-1.34, 1.34)</span>', en: '<span class="math-display">(-1.34, 1.34)</span>' }
-                    ],
-                    correct: 0,
-                    answer: { ar: 'f\'(x) = -5x⁴ + 9x² = 0 → x ≈ ±1.34. متناقصة خارج الفترة (-1.34, 1.34)', en: 'f\'(x) = -5x⁴ + 9x² = 0 → x ≈ ±1.34. Decreasing outside (-1.34, 1.34)' }
-                }
-            ]
-        },
-        {
-            id: 'sec2',
-            title: { ar: ' الجزء 2: الدوال الكسرية ومتعددة التعريف', en: ' Part 2: Rational & Piecewise Functions' },
-            questions: [
-                {
-                    q: { ar: 'الدالة <span class="math-display">f(x) = (x-2)/x</span> متزايدة على:', en: 'The function <span class="math-display">f(x) = (x-2)/x</span> is increasing on:' },
-                    svg: svgGraphs.rational_graph,
-                    options: [
-                        { ar: '<span class="math-display">(-∞, 0) و (0, ∞)</span>', en: '<span class="math-display">(-∞, 0) and (0, ∞)</span>' },
-                        { ar: '<span class="math-display">(-∞, ∞)</span>', en: '<span class="math-display">(-∞, ∞)</span>' },
-                        { ar: '<span class="math-display">(2, ∞)</span>', en: '<span class="math-display">(2, ∞)</span>' },
-                        { ar: '<span class="math-display">(0, 2)</span>', en: '<span class="math-display">(0, 2)</span>' }
-                    ],
-                    correct: 0,
-                    answer: { ar: 'f\'(x) = 2/x² > 0 دائماً (ما عدا x=0). متزايدة على (-∞, 0) و (0, ∞)', en: 'f\'(x) = 2/x² > 0 always (except x=0). Increasing on (-∞, 0) and (0, ∞)' }
-                },
-                {
-                    q: { ar: 'الدالة <span class="math-display">f(x) = x²/(x+3)</span> متناقصة على:', en: 'The function <span class="math-display">f(x) = x²/(x+3)</span> is decreasing on:' },
-                    options: [
-                        { ar: '<span class="math-display">(-6, -3) و (-3, 0)</span>', en: '<span class="math-display">(-6, -3) and (-3, 0)</span>' },
-                        { ar: '<span class="math-display">(-∞, -6) و (0, ∞)</span>', en: '<span class="math-display">(-, -6) and (0, ∞)</span>' },
-                        { ar: '<span class="math-display">(-∞, -3)</span>', en: '<span class="math-display">(-∞, -3)</span>' },
-                        { ar: '<span class="math-display">(-3, )</span>', en: '<span class="math-display">(-3, ∞)</span>' }
-                    ],
-                    correct: 0,
-                    answer: { ar: 'f\'(x) = x(x+6)/(x+3)² = 0 → x = 0 و x = -6. متناقصة بين -6 و 0 (ما عدا -3)', en: 'f\'(x) = x(x+6)/(x+3)² = 0 → x = 0 and x = -6. Decreasing between -6 and 0 (except -3)' }
-                },
-                {
-                    q: { ar: 'الدالة متعددة التعريف <span class="math-display">f(x) = {2.5x+11, x≤-2; 0.5x²-4x+2, x>0}</span> متزايدة على:', en: 'The piecewise function <span class="math-display">f(x) = {2.5x+11, x≤-2; 0.5x²-4x+2, x>0}</span> is increasing on:' },
-                    svg: svgGraphs.piecewise_graph,
-                    options: [
-                        { ar: '<span class="math-display">(-∞, -2] و (4, ∞)</span>', en: '<span class="math-display">(-∞, -2] and (4, ∞)</span>' },
-                        { ar: '<span class="math-display">(0, 4)</span>', en: '<span class="math-display">(0, 4)</span>' },
-                        { ar: '<span class="math-display">(-∞, ∞)</span>', en: '<span class="math-display">(-∞, )</span>' },
-                        { ar: '<span class="math-display">(-2, 0)</span>', en: '<span class="math-display">(-2, 0)</span>' }
-                    ],
-                    correct: 0,
-                    answer: { ar: 'الجزء الأول ميله 2.5 > 0 (متزايد). الجزء الثاني f\'(x) = x-4 = 0 → x = 4. متزايد لـ x > 4', en: 'First part slope 2.5 > 0 (increasing). Second part f\'(x) = x-4 = 0 → x = 4. Increasing for x > 4' }
-                },
-                {
-                    q: { ar: 'الدالة <span class="math-display">f(x) = {√x, x≥0; -√(-x), x<0}</span> هي:', en: 'The function <span class="math-display">f(x) = {√x, x≥0; -√(-x), x<0}</span> is:' },
-                    options: [
-                        { ar: 'متزايدة على (-∞, ∞)', en: 'Increasing on (-∞, ∞)' },
-                        { ar: 'متناقصة على (-∞, ∞)', en: 'Decreasing on (-∞, ∞)' },
-                        { ar: 'ثابتة', en: 'Constant' },
-                        { ar: 'متزايدة فقط لـ x > 0', en: 'Increasing only for x > 0' }
-                    ],
-                    correct: 0,
-                    answer: { ar: 'كلا الجزأين متزايدان. الدالة متزايدة على كامل مجالها', en: 'Both parts are increasing. Function is increasing on its entire domain' }
-                }
-            ]
-        },
-        {
-            id: 'sec3',
-            title: { ar: '🔹 الجزء 3: متوسط معدل التغير', en: '🔹 Part 3: Average Rate of Change' },
-            questions: [
-                {
-                    q: { ar: 'ما متوسط معدل التغير للدالة <span class="math-display">f(x) = x² + 3x - 4</span> على الفترة <span class="math-display">[-1, 3]</span>؟', en: 'What is the average rate of change of <span class="math-display">f(x) = x² + 3x - 4</span> on <span class="math-display">[-1, 3]</span>?' },
-                    svg: svgGraphs.arc_formula,
-                    options: [
-                        { ar: '<span class="math-display">5</span>', en: '<span class="math-display">5</span>' },
-                        { ar: '<span class="math-display">4</span>', en: '<span class="math-display">4</span>' },
-                        { ar: '<span class="math-display">6</span>', en: '<span class="math-display">6</span>' },
-                        { ar: '<span class="math-display">3</span>', en: '<span class="math-display">3</span>' }
-                    ],
-                    correct: 0,
-                    answer: { ar: 'f(3) = 14, f(-1) = -6. ARC = (14-(-6))/(3-(-1)) = 20/4 = 5', en: 'f(3) = 14, f(-1) = -6. ARC = (14-(-6))/(3-(-1)) = 20/4 = 5' }
-                },
-                {
-                    q: { ar: 'ما متوسط معدل التغير للدالة <span class="math-display">f(x) = -8x + 2</span> على الفترة <span class="math-display">[4, 8]</span>؟', en: 'What is the average rate of change of <span class="math-display">f(x) = -8x + 2</span> on <span class="math-display">[4, 8]</span>?' },
-                    options: [
-                        { ar: '<span class="math-display">-8</span>', en: '<span class="math-display">-8</span>' },
-                        { ar: '<span class="math-display">8</span>', en: '<span class="math-display">8</span>' },
-                        { ar: '<span class="math-display">-4</span>', en: '<span class="math-display">-4</span>' },
-                        { ar: '<span class="math-display">4</span>', en: '<span class="math-display">4</span>' }
-                    ],
-                    correct: 0,
-                    answer: { ar: 'دالة خطية بميل -8. ARC = -8 دائماً', en: 'Linear function with slope -8. ARC = -8 always' }
-                },
-                {
-                    q: { ar: 'ما متوسط معدل التغير للدالة <span class="math-display">f(x) = 2x² + 6</span> على الفترة <span class="math-display">[2, 6]</span>؟', en: 'What is the average rate of change of <span class="math-display">f(x) = 2x² + 6</span> on <span class="math-display">[2, 6]</span>?' },
-                    options: [
-                        { ar: '<span class="math-display">16</span>', en: '<span class="math-display">16</span>' },
-                        { ar: '<span class="math-display">14</span>', en: '<span class="math-display">14</span>' },
-                        { ar: '<span class="math-display">18</span>', en: '<span class="math-display">18</span>' },
-                        { ar: '<span class="math-display">12</span>', en: '<span class="math-display">12</span>' }
-                    ],
-                    correct: 0,
-                    answer: { ar: 'f(6) = 78, f(2) = 14. ARC = (78-14)/(6-2) = 64/4 = 16', en: 'f(6) = 78, f(2) = 14. ARC = (78-14)/(6-2) = 64/4 = 16' }
-                },
-                {
-                    q: { ar: 'ما متوسط معدل التغير للدالة <span class="math-display">f(x) = -5x³ + 4x - 6</span> على الفترة <span class="math-display">[-1, 5]</span>؟', en: 'What is the average rate of change of <span class="math-display">f(x) = -5x³ + 4x - 6</span> on <span class="math-display">[-1, 5]</span>?' },
-                    options: [
-                        { ar: '<span class="math-display">-101</span>', en: '<span class="math-display">-101</span>' },
-                        { ar: '<span class="math-display">-100</span>', en: '<span class="math-display">-100</span>' },
-                        { ar: '<span class="math-display">-99</span>', en: '<span class="math-display">-99</span>' },
-                        { ar: '<span class="math-display">-102</span>', en: '<span class="math-display">-102</span>' }
-                    ],
-                    correct: 0,
-                    answer: { ar: 'f(5) = -611, f(-1) = -5. ARC = (-611-(-5))/(5-(-1)) = -606/6 = -101', en: 'f(5) = -611, f(-1) = -5. ARC = (-611-(-5))/(5-(-1)) = -606/6 = -101' }
-                }
-            ]
-        },
-        {
-            id: 'sec4',
-            title: { ar: '🔹 الجزء 4: القيم القصوى المحلية (دوال بسيطة)', en: ' Part 4: Local Extrema (Simple Functions)' },
-            questions: [
-                {
-                    q: { ar: 'ما القيمة العظمى المحلية للدالة <span class="math-display">f(x) = 3x³ - 6x² + 8</span>؟', en: 'What is the local maximum of <span class="math-display">f(x) = 3x³ - 6x² + 8</span>?' },
-                    svg: svgGraphs.extrema_formula,
-                    options: [
-                        { ar: '<span class="math-display">f(0) = 8</span>', en: '<span class="math-display">f(0) = 8</span>' },
-                        { ar: '<span class="math-display">f(4/3) ≈ 4.4</span>', en: '<span class="math-display">f(4/3) ≈ 4.4</span>' },
-                        { ar: '<span class="math-display">f(1) = 5</span>', en: '<span class="math-display">f(1) = 5</span>' },
-                        { ar: '<span class="math-display">f(2) = 8</span>', en: '<span class="math-display">f(2) = 8</span>' }
-                    ],
-                    correct: 0,
-                    answer: { ar: 'f\'(x) = 9x² - 12x = 3x(3x-4) = 0 → x = 0 (عظمى) و x = 4/3 (صغرى). f(0) = 8', en: 'f\'(x) = 9x² - 12x = 3x(3x-4) = 0 → x = 0 (max) and x = 4/3 (min). f(0) = 8' }
-                },
-                {
-                    q: { ar: 'ما القيمة الصغرى المحلية للدالة <span class="math-display">g(x) = -2x³ + 7x - 5</span>؟', en: 'What is the local minimum of <span class="math-display">g(x) = -2x³ + 7x - 5</span>?' },
-                    options: [
-                        { ar: '<span class="math-display">g(-1.1) ≈ -10.0</span>', en: '<span class="math-display">g(-1.1) ≈ -10.0</span>' },
-                        { ar: '<span class="math-display">g(1.1) ≈ 0.0</span>', en: '<span class="math-display">g(1.1) ≈ 0.0</span>' },
-                        { ar: '<span class="math-display">g(0) = -5</span>', en: '<span class="math-display">g(0) = -5</span>' },
-                        { ar: '<span class="math-display">g(-1) = -10</span>', en: '<span class="math-display">g(-1) = -10</span>' }
-                    ],
-                    correct: 0,
-                    answer: { ar: 'g\'(x) = -6x² + 7 = 0 → x = ±√(7/6) ≈ ±1.1. x ≈ -1.1 تعطي قيمة صغرى ≈ -10.0', en: 'g\'(x) = -6x² + 7 = 0 → x = ±√(7/6) ≈ ±1.1. x ≈ -1.1 gives local min ≈ -10.0' }
-                },
-                {
-                    q: { ar: 'ما نوع النقطة الحرجة <span class="math-display">x = 0</span> للدالة <span class="math-display">f(x) = -x⁴ + 3x³ - 2</span>؟', en: 'What type of critical point is <span class="math-display">x = 0</span> for <span class="math-display">f(x) = -x⁴ + 3x³ - 2</span>?' },
-                    options: [
-                        { ar: 'نقطة انعطاف (ليست قصوى)', en: 'Inflection point (not extremum)' },
-                        { ar: 'قيمة عظمى محلية', en: 'Local maximum' },
-                        { ar: 'قيمة صغرى محلية', en: 'Local minimum' },
-                        { ar: 'نقطة حرجة فقط', en: 'Just a critical point' }
-                    ],
-                    correct: 0,
-                    answer: { ar: 'f\'(x) = x²(-4x+9) = 0. عند x=0 لا يتغير إشارة f\' → نقطة انعطاف', en: 'f\'(x) = x²(-4x+9) = 0. At x=0, f\' doesn\'t change sign → inflection point' }
-                },
-                {
-                    q: { ar: 'ما القيمة الصغرى المحلية للدالة <span class="math-display">f(x) = x⁴ - 2x² + 5x</span>؟', en: 'What is the local minimum of <span class="math-display">f(x) = x⁴ - 2x² + 5x</span>?' },
-                    options: [
-                        { ar: '<span class="math-display">f(-1.4) ≈ -6.3</span>', en: '<span class="math-display">f(-1.4) ≈ -6.3</span>' },
-                        { ar: '<span class="math-display">f(0) = 0</span>', en: '<span class="math-display">f(0) = 0</span>' },
-                        { ar: '<span class="math-display">f(1) = 4</span>', en: '<span class="math-display">f(1) = 4</span>' },
-                        { ar: '<span class="math-display">f(-1) = -2</span>', en: '<span class="math-display">f(-1) = -2</span>' }
-                    ],
-                    correct: 0,
-                    answer: { ar: 'f\'(x) = 4x³ - 4x + 5 = 0 → x ≈ -1.4 (حل عددي). f(-1.4) ≈ -6.3', en: 'f\'(x) = 4x³ - 4x + 5 = 0 → x ≈ -1.4 (numerical). f(-1.4) ≈ -6.3' }
-                }
-            ]
-        },
-        {
-            id: 'sec5',
-            title: { ar: '🔹 الجزء 5: القيم القصوى (دوال معقدة)', en: '🔹 Part 5: Extrema (Complex Functions)' },
-            questions: [
-                {
-                    q: { ar: 'ما القيمتان الحرجتان للدالة <span class="math-display">f(x) = x⁵ - 2x³ - 6x - 2</span>؟', en: 'What are the critical values of <span class="math-display">f(x) = x⁵ - 2x³ - 6x - 2</span>?' },
-                    options: [
-                        { ar: '<span class="math-display">x ≈ ±1.4</span>', en: '<span class="math-display">x ≈ ±1.4</span>' },
-                        { ar: '<span class="math-display">x ≈ ±2</span>', en: '<span class="math-display">x ≈ ±2</span>' },
-                        { ar: '<span class="math-display">x ≈ 0, ±1</span>', en: '<span class="math-display">x ≈ 0, ±1</span>' },
-                        { ar: '<span class="math-display">x ≈ ±3</span>', en: '<span class="math-display">x ≈ ±3</span>' }
-                    ],
-                    correct: 0,
-                    answer: { ar: 'f\'(x) = 5x⁴ - 6x² - 6 = 0. باستخدام الصيغة التربيعية: x² ≈ 1.85 → x ≈ ±1.4', en: 'f\'(x) = 5x⁴ - 6x² - 6 = 0. Using quadratic formula: x² ≈ 1.85 → x ≈ ±1.4' }
-                },
-                {
-                    q: { ar: 'ما القيمة العظمى المحلية للدالة <span class="math-display">g(x) = x⁷ + 6x² - 4</span>؟', en: 'What is the local maximum of <span class="math-display">g(x) = x⁷ + 6x² - 4</span>?' },
-                    options: [
-                        { ar: '<span class="math-display">g(-1.1) ≈ -1.5</span>', en: '<span class="math-display">g(-1.1) ≈ -1.5</span>' },
-                        { ar: '<span class="math-display">g(0) = -4</span>', en: '<span class="math-display">g(0) = -4</span>' },
-                        { ar: '<span class="math-display">g(1) = 3</span>', en: '<span class="math-display">g(1) = 3</span>' },
-                        { ar: '<span class="math-display">g(-1) = -9</span>', en: '<span class="math-display">g(-1) = -9</span>' }
-                    ],
-                    correct: 0,
-                    answer: { ar: 'g\'(x) = 7x⁶ + 12x = x(7x⁵ + 12) = 0 → x = 0 و x ≈ -1.1. x ≈ -1.1 تعطي قيمة عظمى ≈ -1.5', en: 'g\'(x) = 7x⁶ + 12x = x(7x⁵ + 12) = 0 → x = 0 and x ≈ -1.1. x ≈ -1.1 gives local max ≈ -1.5' }
-                },
-                {
-                    q: { ar: 'كم عدد النقاط الحرجة للدالة <span class="math-display">g(x) = x⁶ - 4x⁴ + x</span>؟', en: 'How many critical points does <span class="math-display">g(x) = x⁶ - 4x⁴ + x</span> have?' },
-                    options: [
-                        { ar: '<span class="math-display">3</span> نقاط', en: '<span class="math-display">3</span> points' },
-                        { ar: '<span class="math-display">2</span> نقاط', en: '<span class="math-display">2</span> points' },
-                        { ar: '<span class="math-display">4</span> نقاط', en: '<span class="math-display">4</span> points' },
-                        { ar: '<span class="math-display">5</span> نقاط', en: '<span class="math-display">5</span> points' }
-                    ],
-                    correct: 0,
-                    answer: { ar: 'g\'(x) = 6x⁵ - 16x³ + 1 = 0. بالحل العددي: x ≈ -1.7, -0.4, 1.6 (ثلاث نقاط)', en: 'g\'(x) = 6x⁵ - 16x³ + 1 = 0. Numerically: x ≈ -1.7, -0.4, 1.6 (three points)' }
-                },
-                {
-                    q: { ar: 'ما القيمة العظمى المحلية للدالة <span class="math-display">f(x) = 0.008x⁵ - 0.05x⁴ - 0.2x³ + 1.2x² - 0.7x</span>؟', en: 'What is the local maximum of <span class="math-display">f(x) = 0.008x⁵ - 0.05x⁴ - 0.2x³ + 1.2x² - 0.7x</span>?' },
-                    options: [
-                        { ar: '<span class="math-display">f(0.3) ≈ -0.1</span> و <span class="math-display">f(5.2) ≈ 3.5</span>', en: '<span class="math-display">f(0.3) ≈ -0.1</span> and <span class="math-display">f(5.2) ≈ 3.5</span>' },
-                        { ar: '<span class="math-display">f(-3) ≈ -15.2</span>', en: '<span class="math-display">f(-3) ≈ -15.2</span>' },
-                        { ar: '<span class="math-display">f(2.5) ≈ 1.8</span>', en: '<span class="math-display">f(2.5) ≈ 1.8</span>' },
-                        { ar: '<span class="math-display">f(0) = 0</span>', en: '<span class="math-display">f(0) = 0</span>' }
-                    ],
-                    correct: 0,
-                    answer: { ar: 'f\'(x) = 0.04x⁴ - 0.2x³ - 0.6x² + 2.4x - 0.7 = 0 → x ≈ -3.0, 0.3, 2.5, 5.2. العظمى عند x ≈ 0.3 و x ≈ 5.2', en: 'f\'(x) = 0.04x⁴ - 0.2x³ - 0.6x² + 2.4x - 0.7 = 0 → x ≈ -3.0, 0.3, 2.5, 5.2. Maxima at x ≈ 0.3 and x ≈ 5.2' }
-                }
-            ]
-        }
-    ]
-};
-
-function shuffleArray(array) {
-    const arr = [...array];
-    for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(rng() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-    return arr;
+sections: [
+{
+id: 'sec1',
+title: { ar: '🔹 الجزء 1: فترات التزايد والتناقص', en: '🔹 Part 1: Increasing & Decreasing Intervals' },
+questions: [
+{
+q: { ar: 'من الرسم البياني للدالة <span class="math-display">f(x) = x³ - x² - 2x + 3</span>، فترات التزايد هي:', en: 'From the graph of <span class="math-display">f(x) = x³ - x² - 2x + 3</span>, the increasing intervals are:' },
+options: [
+{ ar: '<span class="math-display">(-∞, -0.7) و (1.5, ∞)</span>', en: '<span class="math-display">(-∞, -0.7) and (1.5, ∞)</span>' },
+{ ar: '<span class="math-display">(-0.7, 1.5)</span>', en: '<span class="math-display">(-0.7, 1.5)</span>' },
+{ ar: '<span class="math-display">(-∞, ∞)</span>', en: '<span class="math-display">(-∞, ∞)</span>' },
+{ ar: '<span class="math-display">(-∞, 0) و (0, ∞)</span>', en: '<span class="math-display">(-∞, 0) and (0, ∞)</span>' }
+],
+correct: 0,
+answer: { ar: 'الدالة متزايدة عندما يكون الميل موجباً: (-∞, -0.7) و (1.5, ∞)', en: 'Function is increasing when slope is positive: (-∞, -0.7) and (1.5, ∞)' }
+},
+{
+q: { ar: 'من الرسم البياني للدالة <span class="math-display">f(x) = -x³ - 4x² + 2</span>، فترة التناقص هي:', en: 'From the graph of <span class="math-display">f(x) = -x³ - 4x² + 2</span>, the decreasing interval is:' },
+options: [
+{ ar: '<span class="math-display">(-∞, -2.67) و (0, ∞)</span>', en: '<span class="math-display">(-∞, -2.67) and (0, ∞)</span>' },
+{ ar: '<span class="math-display">(-2.67, 0)</span>', en: '<span class="math-display">(-2.67, 0)</span>' },
+{ ar: '<span class="math-display">(-∞, ∞)</span>', en: '<span class="math-display">(-∞, ∞)</span>' },
+{ ar: '<span class="math-display">(0, ∞) فقط</span>', en: '<span class="math-display">(0, ∞) only</span>' }
+],
+correct: 0,
+answer: { ar: 'الدالة متناقصة عندما يكون الميل سالباً: (-∞, -2.67) و (0, ∞)', en: 'Function is decreasing when slope is negative: (-∞, -2.67) and (0, ∞)' }
+},
+{
+q: { ar: 'من الرسم البياني للدالة <span class="math-display">f(x) = x/(x-2)</span>، فترات التزايد هي:', en: 'From the graph of <span class="math-display">f(x) = x/(x-2)</span>, the increasing intervals are:' },
+options: [
+{ ar: '<span class="math-display">(-∞, 0) و (0, ∞)</span>', en: '<span class="math-display">(-∞, 0) and (0, ∞)</span>' },
+{ ar: '<span class="math-display">(-∞, 2) و (2, ∞)</span>', en: '<span class="math-display">(-∞, 2) and (2, ∞)</span>' },
+{ ar: '<span class="math-display">(-∞, ∞)</span>', en: '<span class="math-display">(-∞, ∞)</span>' },
+{ ar: '<span class="math-display">(2, ∞) فقط</span>', en: '<span class="math-display">(2, ∞) only</span>' }
+],
+correct: 0,
+answer: { ar: 'الدالة متزايدة على كل مجالها ما عدا عند x = 2 (خط تقارب رأسي)', en: 'Function is increasing on its entire domain except at x = 2 (vertical asymptote)' }
+},
+{
+q: { ar: 'من الرسم البياني للدالة <span class="math-display">f(x) = x²/(x+3)</span>، فترات التناقص هي:', en: 'From the graph of <span class="math-display">f(x) = x²/(x+3)</span>, the decreasing intervals are:' },
+options: [
+{ ar: '<span class="math-display">(-6, -3) و (-3, 0)</span>', en: '<span class="math-display">(-6, -3) and (-3, 0)</span>' },
+{ ar: '<span class="math-display">(-∞, -6) و (0, ∞)</span>', en: '<span class="math-display">(-∞, -6) and (0, ∞)</span>' },
+{ ar: '<span class="math-display">(-∞, -3)</span>', en: '<span class="math-display">(-∞, -3)</span>' },
+{ ar: '<span class="math-display">(-3, ∞)</span>', en: '<span class="math-display">(-3, ∞)</span>' }
+],
+correct: 0,
+answer: { ar: 'الدالة متناقصة بين القيمتين الحرجتين: (-6, -3) و (-3, 0)', en: 'Function is decreasing between critical values: (-6, -3) and (-3, 0)' }
 }
-
+]
+},
+{
+id: 'sec2',
+title: { ar: '🔹 الجزء 2: متوسط معدل التغير', en: '🔹 Part 2: Average Rate of Change' },
+questions: [
+{
+q: { ar: 'احسب متوسط معدل التغير للدالة <span class="math-display">f(x) = x² + 3x - 4</span> على الفترة <span class="math-display">[-1, 3]</span>', en: 'Calculate the average rate of change of <span class="math-display">f(x) = x² + 3x - 4</span> on the interval <span class="math-display">[-1, 3]</span>' },
+options: [
+{ ar: '<span class="math-display">5</span>', en: '<span class="math-display">5</span>' },
+{ ar: '<span class="math-display">-5</span>', en: '<span class="math-display">-5</span>' },
+{ ar: '<span class="math-display">20</span>', en: '<span class="math-display">20</span>' },
+{ ar: '<span class="math-display">4</span>', en: '<span class="math-display">4</span>' }
+],
+correct: 0,
+answer: { ar: 'ARC = [f(3) - f(-1)] / [3 - (-1)] = [14 - (-6)] / 4 = 20/4 = 5', en: 'ARC = [f(3) - f(-1)] / [3 - (-1)] = [14 - (-6)] / 4 = 20/4 = 5' }
+},
+{
+q: { ar: 'احسب متوسط معدل التغير للدالة <span class="math-display">f(x) = -8x + 2</span> على الفترة <span class="math-display">[4, 8]</span>', en: 'Calculate the average rate of change of <span class="math-display">f(x) = -8x + 2</span> on the interval <span class="math-display">[4, 8]</span>' },
+options: [
+{ ar: '<span class="math-display">-8</span>', en: '<span class="math-display">-8</span>' },
+{ ar: '<span class="math-display">8</span>', en: '<span class="math-display">8</span>' },
+{ ar: '<span class="math-display">-32</span>', en: '<span class="math-display">-32</span>' },
+{ ar: '<span class="math-display">4</span>', en: '<span class="math-display">4</span>' }
+],
+correct: 0,
+answer: { ar: 'ARC = [f(8) - f(4)] / [8 - 4] = [-62 - (-30)] / 4 = -32/4 = -8', en: 'ARC = [f(8) - f(4)] / [8 - 4] = [-62 - (-30)] / 4 = -32/4 = -8' }
+},
+{
+q: { ar: 'احسب متوسط معدل التغير للدالة <span class="math-display">f(x) = 2x² + 6</span> على الفترة <span class="math-display">[2, 6]</span>', en: 'Calculate the average rate of change of <span class="math-display">f(x) = 2x² + 6</span> on the interval <span class="math-display">[2, 6]</span>' },
+options: [
+{ ar: '<span class="math-display">16</span>', en: '<span class="math-display">16</span>' },
+{ ar: '<span class="math-display">64</span>', en: '<span class="math-display">64</span>' },
+{ ar: '<span class="math-display">4</span>', en: '<span class="math-display">4</span>' },
+{ ar: '<span class="math-display">8</span>', en: '<span class="math-display">8</span>' }
+],
+correct: 0,
+answer: { ar: 'ARC = [f(6) - f(2)] / [6 - 2] = [78 - 14] / 4 = 64/4 = 16', en: 'ARC = [f(6) - f(2)] / [6 - 2] = [78 - 14] / 4 = 64/4 = 16' }
+},
+{
+q: { ar: 'احسب متوسط معدل التغير للدالة <span class="math-display">f(x) = -4x² + 2x - 8</span> على الفترة <span class="math-display">[-2, 3]</span>', en: 'Calculate the average rate of change of <span class="math-display">f(x) = -4x² + 2x - 8</span> on the interval <span class="math-display">[-2, 3]</span>' },
+options: [
+{ ar: '<span class="math-display">-2</span>', en: '<span class="math-display">-2</span>' },
+{ ar: '<span class="math-display">2</span>', en: '<span class="math-display">2</span>' },
+{ ar: '<span class="math-display">-10</span>', en: '<span class="math-display">-10</span>' },
+{ ar: '<span class="math-display">5</span>', en: '<span class="math-display">5</span>' }
+],
+correct: 0,
+answer: { ar: 'ARC = [f(3) - f(-2)] / [3 - (-2)] = [-38 - (-28)] / 5 = -10/5 = -2', en: 'ARC = [f(3) - f(-2)] / [3 - (-2)] = [-38 - (-28)] / 5 = -10/5 = -2' }
+}
+]
+},
+{
+id: 'sec3',
+title: { ar: '🔹 الجزء 3: القيم القصوى المحلية', en: '🔹 Part 3: Local Extrema' },
+questions: [
+{
+q: { ar: 'أوجد القيم القصوى المحلية للدالة <span class="math-display">f(x) = 3x³ - 6x² + 8</span>', en: 'Find the local extrema of <span class="math-display">f(x) = 3x³ - 6x² + 8</span>' },
+options: [
+{ ar: '<span class="math-display">عظمى محلية عند x=0: f(0)=8، صغرى محلية عند x≈1.3: f(1.3)≈4.4</span>', en: '<span class="math-display">Local max at x=0: f(0)=8, Local min at x≈1.3: f(1.3)≈4.4</span>' },
+{ ar: '<span class="math-display">عظمى محلية عند x=1.3، صغرى محلية عند x=0</span>', en: '<span class="math-display">Local max at x=1.3, Local min at x=0</span>' },
+{ ar: '<span class="math-display">عظمى محلية فقط عند x=0</span>', en: '<span class="math-display">Local max only at x=0</span>' },
+{ ar: '<span class="math-display">لا توجد قيم قصوى</span>', en: '<span class="math-display">No extrema</span>' }
+],
+correct: 0,
+answer: { ar: "f'(x) = 9x² - 12x = 3x(3x-4) = 0 → x=0 أو x=4/3≈1.3. عند x=0: عظمى محلية، عند x≈1.3: صغرى محلية", en: "f'(x) = 9x² - 12x = 3x(3x-4) = 0 → x=0 or x=4/3≈1.3. At x=0: local max, at x≈1.3: local min" }
+},
+{
+q: { ar: 'أوجد القيم القصوى المحلية للدالة <span class="math-display">g(x) = -2x³ + 7x - 5</span>', en: 'Find the local extrema of <span class="math-display">g(x) = -2x³ + 7x - 5</span>' },
+options: [
+{ ar: '<span class="math-display">صغرى محلية عند x≈-1.1: g(-1.1)≈-10.0، عظمى محلية عند x≈1.1: g(1.1)≈0.0</span>', en: '<span class="math-display">Local min at x≈-1.1: g(-1.1)≈-10.0, Local max at x≈1.1: g(1.1)≈0.0</span>' },
+{ ar: '<span class="math-display">عظمى محلية عند x≈-1.1، صغرى محلية عند x≈1.1</span>', en: '<span class="math-display">Local max at x≈-1.1, Local min at x≈1.1</span>' },
+{ ar: '<span class="math-display">عظمى محلية فقط عند x=0</span>', en: '<span class="math-display">Local max only at x=0</span>' },
+{ ar: '<span class="math-display">لا توجد قيم قصوى</span>', en: '<span class="math-display">No extrema</span>' }
+],
+correct: 0,
+answer: { ar: "g'(x) = -6x² + 7 = 0 → x = ±√(7/6) ≈ ±1.1. عند x≈-1.1: صغرى محلية، عند x≈1.1: عظمى محلية", en: "g'(x) = -6x² + 7 = 0 → x = ±√(7/6) ≈ ±1.1. At x≈-1.1: local min, at x≈1.1: local max" }
+},
+{
+q: { ar: 'أوجد القيم القصوى المحلية للدالة <span class="math-display">f(x) = -x⁴ + 3x³ - 2</span>', en: 'Find the local extrema of <span class="math-display">f(x) = -x⁴ + 3x³ - 2</span>' },
+options: [
+{ ar: '<span class="math-display">عظمى محلية عند x≈2.3: f(2.3)≈6.5، نقطة انعطاف عند x=0</span>', en: '<span class="math-display">Local max at x≈2.3: f(2.3)≈6.5, Inflection point at x=0</span>' },
+{ ar: '<span class="math-display">عظمى محلية عند x=0، صغرى محلية عند x≈2.3</span>', en: '<span class="math-display">Local max at x=0, Local min at x≈2.3</span>' },
+{ ar: '<span class="math-display">صغرى محلية فقط عند x=0</span>', en: '<span class="math-display">Local min only at x=0</span>' },
+{ ar: '<span class="math-display">لا توجد قيم قصوى</span>', en: '<span class="math-display">No extrema</span>' }
+],
+correct: 0,
+answer: { ar: "f'(x) = -4x³ + 9x² = x²(-4x+9) = 0 → x=0 أو x=2.25. عند x=0: نقطة انعطاف، عند x≈2.3: عظمى محلية", en: "f'(x) = -4x³ + 9x² = x²(-4x+9) = 0 → x=0 or x=2.25. At x=0: inflection point, at x≈2.3: local max" }
+},
+{
+q: { ar: 'أوجد القيم القصوى المحلية للدالة <span class="math-display">g(x) = x⁷ + 6x² - 4</span>', en: 'Find the local extrema of <span class="math-display">g(x) = x⁷ + 6x² - 4</span>' },
+options: [
+{ ar: '<span class="math-display">عظمى محلية عند x≈-1.1: g(-1.1)≈-1.5، صغرى محلية عند x=0: g(0)=-4</span>', en: '<span class="math-display">Local max at x≈-1.1: g(-1.1)≈-1.5, Local min at x=0: g(0)=-4</span>' },
+{ ar: '<span class="math-display">صغرى محلية عند x≈-1.1، عظمى محلية عند x=0</span>', en: '<span class="math-display">Local min at x≈-1.1, Local max at x=0</span>' },
+{ ar: '<span class="math-display">عظمى محلية فقط عند x=0</span>', en: '<span class="math-display">Local max only at x=0</span>' },
+{ ar: '<span class="math-display">لا توجد قيم قصوى</span>', en: '<span class="math-display">No extrema</span>' }
+],
+correct: 0,
+answer: { ar: "g'(x) = 7x⁶ + 12x = x(7x⁵+12) = 0 → x=0 أو x≈-1.1. عند x≈-1.1: عظمى محلية، عند x=0: صغرى محلية", en: "g'(x) = 7x⁶ + 12x = x(7x⁵+12) = 0 → x=0 or x≈-1.1. At x≈-1.1: local max, at x=0: local min" }
+}
+]
+},
+{
+id: 'sec4',
+title: { ar: '🔹 الجزء 4: تطبيقات متقدمة', en: '🔹 Part 4: Advanced Applications' },
+questions: [
+{
+q: { ar: 'احسب متوسط معدل التغير للدالة <span class="math-display">f(x) = -5x³ + 4x - 6</span> على الفترة <span class="math-display">[-1, 5]</span>', en: 'Calculate the average rate of change of <span class="math-display">f(x) = -5x³ + 4x - 6</span> on the interval <span class="math-display">[-1, 5]</span>' },
+options: [
+{ ar: '<span class="math-display">-101</span>', en: '<span class="math-display">-101</span>' },
+{ ar: '<span class="math-display">101</span>', en: '<span class="math-display">101</span>' },
+{ ar: '<span class="math-display">-606</span>', en: '<span class="math-display">-606</span>' },
+{ ar: '<span class="math-display">6</span>', en: '<span class="math-display">6</span>' }
+],
+correct: 0,
+answer: { ar: 'ARC = [f(5) - f(-1)] / [5 - (-1)] = [-611 - (-5)] / 6 = -606/6 = -101', en: 'ARC = [f(5) - f(-1)] / [5 - (-1)] = [-611 - (-5)] / 6 = -606/6 = -101' }
+},
+{
+q: { ar: 'أوجد القيم القصوى المحلية للدالة <span class="math-display">f(x) = x⁵ - 2x³ - 6x - 2</span>', en: 'Find the local extrema of <span class="math-display">f(x) = x⁵ - 2x³ - 6x - 2</span>' },
+options: [
+{ ar: '<span class="math-display">عظمى محلية عند x≈-1.4: f(-1.4)≈4.1، صغرى محلية عند x≈1.4: f(1.4)≈-8.1</span>', en: '<span class="math-display">Local max at x≈-1.4: f(-1.4)≈4.1, Local min at x≈1.4: f(1.4)≈-8.1</span>' },
+{ ar: '<span class="math-display">صغرى محلية عند x≈-1.4، عظمى محلية عند x≈1.4</span>', en: '<span class="math-display">Local min at x≈-1.4, Local max at x≈1.4</span>' },
+{ ar: '<span class="math-display">عظمى محلية فقط عند x=0</span>', en: '<span class="math-display">Local max only at x=0</span>' },
+{ ar: '<span class="math-display">لا توجد قيم قصوى</span>', en: '<span class="math-display">No extrema</span>' }
+],
+correct: 0,
+answer: { ar: "f'(x) = 5x⁴ - 6x² - 6 = 0 → x² = (6+√156)/10 ≈ 1.85 → x ≈ ±1.4. عند x≈-1.4: عظمى محلية، عند x≈1.4: صغرى محلية", en: "f'(x) = 5x⁴ - 6x² - 6 = 0 → x² = (6+√156)/10 ≈ 1.85 → x ≈ ±1.4. At x≈-1.4: local max, at x≈1.4: local min" }
+},
+{
+q: { ar: 'احسب متوسط معدل التغير للدالة <span class="math-display">f(x) = x⁴ + 3x - 12</span> على الفترة <span class="math-display">[-5, -1]</span>', en: 'Calculate the average rate of change of <span class="math-display">f(x) = x⁴ + 3x - 12</span> on the interval <span class="math-display">[-5, -1]</span>' },
+options: [
+{ ar: '<span class="math-display">-153</span>', en: '<span class="math-display">-153</span>' },
+{ ar: '<span class="math-display">153</span>', en: '<span class="math-display">153</span>' },
+{ ar: '<span class="math-display">-612</span>', en: '<span class="math-display">-612</span>' },
+{ ar: '<span class="math-display">4</span>', en: '<span class="math-display">4</span>' }
+],
+correct: 0,
+answer: { ar: 'ARC = [f(-1) - f(-5)] / [-1 - (-5)] = [-14 - 598] / 4 = -612/4 = -153', en: 'ARC = [f(-1) - f(-5)] / [-1 - (-5)] = [-14 - 598] / 4 = -612/4 = -153' }
+},
+{
+q: { ar: 'أوجد القيم القصوى المحلية للدالة <span class="math-display">g(x) = x⁶ - 4x⁴ + x</span>', en: 'Find the local extrema of <span class="math-display">g(x) = x⁶ - 4x⁴ + x</span>' },
+options: [
+{ ar: '<span class="math-display">صغرى محلية عند x≈-1.7: g(-1.7)≈-13.5، عظمى محلية عند x≈-0.4: g(-0.4)≈-0.3، صغرى محلية عند x≈1.6: g(1.6)≈-10.2</span>', en: '<span class="math-display">Local min at x≈-1.7: g(-1.7)≈-13.5, Local max at x≈-0.4: g(-0.4)≈-0.3, Local min at x≈1.6: g(1.6)≈-10.2</span>' },
+{ ar: '<span class="math-display">عظمى محلية عند x≈-1.7، صغرى محلية عند x≈-0.4، عظمى محلية عند x≈1.6</span>', en: '<span class="math-display">Local max at x≈-1.7, Local min at x≈-0.4, Local max at x≈1.6</span>' },
+{ ar: '<span class="math-display">عظمى محلية فقط عند x=0</span>', en: '<span class="math-display">Local max only at x=0</span>' },
+{ ar: '<span class="math-display">لا توجد قيم قصوى</span>', en: '<span class="math-display">No extrema</span>' }
+],
+correct: 0,
+answer: { ar: "g'(x) = 6x⁵ - 16x³ + 1 = 0 → x ≈ -1.7, -0.4, 1.6. عند x≈-1.7: صغرى محلية، عند x≈-0.4: عظمى محلية، عند x≈1.6: صغرى محلية", en: "g'(x) = 6x⁵ - 16x³ + 1 = 0 → x ≈ -1.7, -0.4, 1.6. At x≈-1.7: local min, at x≈-0.4: local max, at x≈1.6: local min" }
+}
+]
+},
+{
+id: 'sec5',
+title: { ar: '🔹 الجزء 5: مسائل شاملة', en: '🔹 Part 5: Comprehensive Problems' },
+questions: [
+{
+q: { ar: 'احسب متوسط معدل التغير للدالة <span class="math-display">f(x) = 5x² + 6x - 9</span> على الفترة <span class="math-display">[3, 6]</span>', en: 'Calculate the average rate of change of <span class="math-display">f(x) = 5x² + 6x - 9</span> on the interval <span class="math-display">[3, 6]</span>' },
+options: [
+{ ar: '<span class="math-display">51</span>', en: '<span class="math-display">51</span>' },
+{ ar: '<span class="math-display">153</span>', en: '<span class="math-display">153</span>' },
+{ ar: '<span class="math-display">3</span>', en: '<span class="math-display">3</span>' },
+{ ar: '<span class="math-display">54</span>', en: '<span class="math-display">54</span>' }
+],
+correct: 0,
+answer: { ar: 'ARC = [f(6) - f(3)] / [6 - 3] = [207 - 54] / 3 = 153/3 = 51', en: 'ARC = [f(6) - f(3)] / [6 - 3] = [207 - 54] / 3 = 153/3 = 51' }
+},
+{
+q: { ar: 'أوجد القيم القصوى المحلية للدالة <span class="math-display">f(x) = -x⁵ + 3x² + x - 1</span>', en: 'Find the local extrema of <span class="math-display">f(x) = -x⁵ + 3x² + x - 1</span>' },
+options: [
+{ ar: '<span class="math-display">صغرى محلية عند x≈-0.2: f(-0.2)≈-1.3، عظمى محلية عند x≈1.1: f(1.1)≈2.0</span>', en: '<span class="math-display">Local min at x≈-0.2: f(-0.2)≈-1.3, Local max at x≈1.1: f(1.1)≈2.0</span>' },
+{ ar: '<span class="math-display">عظمى محلية عند x≈-0.2، صغرى محلية عند x≈1.1</span>', en: '<span class="math-display">Local max at x≈-0.2, Local min at x≈1.1</span>' },
+{ ar: '<span class="math-display">عظمى محلية فقط عند x=0</span>', en: '<span class="math-display">Local max only at x=0</span>' },
+{ ar: '<span class="math-display">لا توجد قيم قصوى</span>', en: '<span class="math-display">No extrema</span>' }
+],
+correct: 0,
+answer: { ar: "f'(x) = -5x⁴ + 6x + 1 = 0 → x ≈ -0.2, 1.1. عند x≈-0.2: صغرى محلية، عند x≈1.1: عظمى محلية", en: "f'(x) = -5x⁴ + 6x + 1 = 0 → x ≈ -0.2, 1.1. At x≈-0.2: local min, at x≈1.1: local max" }
+},
+{
+q: { ar: 'احسب متوسط معدل التغير للدالة <span class="math-display">f(x) = 2x² + 6x - 1</span> على الفترة <span class="math-display">[5, 9]</span>', en: 'Calculate the average rate of change of <span class="math-display">f(x) = 2x² + 6x - 1</span> on the interval <span class="math-display">[5, 9]</span>' },
+options: [
+{ ar: '<span class="math-display">34</span>', en: '<span class="math-display">34</span>' },
+{ ar: '<span class="math-display">136</span>', en: '<span class="math-display">136</span>' },
+{ ar: '<span class="math-display">4</span>', en: '<span class="math-display">4</span>' },
+{ ar: '<span class="math-display">79</span>', en: '<span class="math-display">79</span>' }
+],
+correct: 0,
+answer: { ar: 'ARC = [f(9) - f(5)] / [9 - 5] = [215 - 79] / 4 = 136/4 = 34', en: 'ARC = [f(9) - f(5)] / [9 - 5] = [215 - 79] / 4 = 136/4 = 34' }
+},
+{
+q: { ar: 'أوجد القيم القصوى المحلية للدالة <span class="math-display">f(x) = 0.008x⁵ - 0.05x⁴ - 0.2x³ + 1.2x² - 0.7x</span>', en: 'Find the local extrema of <span class="math-display">f(x) = 0.008x⁵ - 0.05x⁴ - 0.2x³ + 1.2x² - 0.7x</span>' },
+options: [
+{ ar: '<span class="math-display">صغرى محلية عند x≈-3.0: f(-3.0)≈-15.2، عظمى محلية عند x≈0.3: f(0.3)≈-0.1، صغرى محلية عند x≈2.5: f(2.5)≈1.8، عظمى محلية عند x≈5.2: f(5.2)≈3.5</span>', en: '<span class="math-display">Local min at x≈-3.0: f(-3.0)≈-15.2, Local max at x≈0.3: f(0.3)≈-0.1, Local min at x≈2.5: f(2.5)≈1.8, Local max at x≈5.2: f(5.2)≈3.5</span>' },
+{ ar: '<span class="math-display">عظمى محلية عند x≈-3.0، صغرى محلية عند x≈0.3، عظمى محلية عند x≈2.5، صغرى محلية عند x≈5.2</span>', en: '<span class="math-display">Local max at x≈-3.0, Local min at x≈0.3, Local max at x≈2.5, Local min at x≈5.2</span>' },
+{ ar: '<span class="math-display">عظمى محلية فقط عند x=0</span>', en: '<span class="math-display">Local max only at x=0</span>' },
+{ ar: '<span class="math-display">لا توجد قيم قصوى</span>', en: '<span class="math-display">No extrema</span>' }
+],
+correct: 0,
+answer: { ar: "f'(x) = 0.04x⁴ - 0.2x³ - 0.6x² + 2.4x - 0.7 = 0 → x ≈ -3.0, 0.3, 2.5, 5.2. عند x≈-3.0: صغرى محلية، عند x≈0.3: عظمى محلية، عند x≈2.5: صغرى محلية، عند x≈5.2: عظمى محلية", en: "f'(x) = 0.04x⁴ - 0.2x³ - 0.6x² + 2.4x - 0.7 = 0 → x ≈ -3.0, 0.3, 2.5, 5.2. At x≈-3.0: local min, at x≈0.3: local max, at x≈2.5: local min, at x≈5.2: local max" }
+}
+]
+}
+]
+};
+function shuffleArray(array) {
+const arr = [...array];
+for (let i = arr.length - 1; i > 0; i--) {
+const j = Math.floor(rng() * (i + 1));
+[arr[i], arr[j]] = [arr[j], arr[i]];
+}
+return arr;
+}
 let examData;
 let correctAnswersMap = {};
 let currentLang = 'ar';
 let timeRemaining = TOTAL_TIME;
 let timerInterval;
-
 function prepareShuffledExam() {
-    rng = mulberry32(currentSeed);
-    examData = JSON.parse(JSON.stringify(originalExamData));
-    correctAnswersMap = {};
-    let globalIdx = 0;
-    examData.sections.forEach((section) => {
-        section.questions = shuffleArray(section.questions);
-        section.questions.forEach((q) => {
-            const optionsWithCorrect = q.options.map((opt, idx) => ({ option: opt, isCorrect: idx === q.correct }));
-            const shuffledOptions = shuffleArray(optionsWithCorrect);
-            q.options = shuffledOptions.map(o => o.option);
-            q.correct = shuffledOptions.findIndex(o => o.isCorrect);
-            correctAnswersMap[globalIdx] = String.fromCharCode(97 + q.correct);
-            globalIdx++;
-        });
-    });
+rng = mulberry32(currentSeed);
+examData = JSON.parse(JSON.stringify(originalExamData));
+correctAnswersMap = {};
+let globalIdx = 0;
+examData.sections.forEach((section) => {
+section.questions = shuffleArray(section.questions);
+section.questions.forEach((q) => {
+const optionsWithCorrect = q.options.map((opt, idx) => ({ option: opt, isCorrect: idx === q.correct }));
+const shuffledOptions = shuffleArray(optionsWithCorrect);
+q.options = shuffledOptions.map(o => o.option);
+q.correct = shuffledOptions.findIndex(o => o.isCorrect);
+correctAnswersMap[globalIdx] = String.fromCharCode(97 + q.correct);
+globalIdx++;
+});
+});
 }
-
 function reshuffleExam() {
-    const msg = currentLang === 'ar' ? '🔄 سيتم إنشاء أسئلة جديدة ومسح إجاباتك الحالية. هل أنت متأكد؟' : '🔄 New questions will be generated and current answers cleared. Are you sure?';
-    if (confirm(msg)) {
-        currentSeed = Date.now(); timeRemaining = TOTAL_TIME; answersVisible = false;
-        prepareShuffledExam(); renderExam(); saveState();
-        alert(currentLang === 'ar' ? ' تم تغيير الأسئلة! حظاً موفقاً! ' : '🎲 Questions changed! Good luck! 🍀');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+const msg = currentLang === 'ar' ? '🔄 سيتم إنشاء أسئلة جديدة ومسح إجاباتك الحالية. هل أنت متأكد؟' : '🔄 New questions will be generated and current answers cleared. Are you sure?';
+if (confirm(msg)) {
+currentSeed = Date.now(); timeRemaining = TOTAL_TIME; answersVisible = false;
+prepareShuffledExam(); renderExam(); saveState();
+alert(currentLang === 'ar' ? '🎲 تم تغيير الأسئلة! حظاً موفقاً! 🍀' : '🎲 Questions changed! Good luck! 🍀');
+window.scrollTo({ top: 0, behavior: 'smooth' });
 }
-
+}
 function setLanguage(lang) {
-    currentLang = lang;
-    document.documentElement.lang = lang;
-    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
-    document.getElementById('btn-ar').classList.toggle('active', lang === 'ar');
-    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
-    document.body.classList.toggle('en-mode', lang === 'en');
-    document.querySelectorAll('[data-ar][data-en]').forEach(el => {
-        el.innerHTML = lang === 'ar' ? el.getAttribute('data-ar') : el.getAttribute('data-en');
-    });
-    renderExam(); saveState(false);
+currentLang = lang;
+document.documentElement.lang = lang;
+document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+document.getElementById('btn-ar').classList.toggle('active', lang === 'ar');
+document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+document.body.classList.toggle('en-mode', lang === 'en');
+document.querySelectorAll('[data-ar][data-en]').forEach(el => {
+el.innerHTML = lang === 'ar' ? el.getAttribute('data-ar') : el.getAttribute('data-en');
+});
+renderExam(); saveState(false);
 }
-
 function renderExam() {
-    const container = document.getElementById('exam-content');
-    const labels = { ar: { option: ['أ', 'ب', 'ج', 'د'], answer: '✅ الإجابة:' }, en: { option: ['A', 'B', 'C', 'D'], answer: '✅ Answer:' } };
-    const lbl = labels[currentLang]; const isRTL = currentLang === 'ar';
-    let html = ''; let globalIdx = 0;
-    examData.sections.forEach((section) => {
-        html += `<section class="bg-white p-6 rounded-2xl shadow-lg border-2 border-teal-100">
-            <h2 class="text-xl font-bold mb-4 text-teal-700">${section.title[currentLang]}</h2>
-            <ol class="space-y-4 text-sm">`;
-        section.questions.forEach((q) => {
-            const bs = isRTL ? 'border-r-4 pr-4' : 'border-l-4 pl-4';
-            html += `<li class="${bs} border-teal-400 py-2" id="q-${globalIdx}">
-                <strong>${globalIdx + 1}.</strong> ${q.q[currentLang]}<br>`;
-            if (q.svg) html += `<div class="graph-container">${q.svg}</div>`;
-            q.options.forEach((opt, oIdx) => {
-                const rs = isRTL ? 'mr-4 ml-2' : 'ml-4 mr-2';
-                html += `<label class="cursor-pointer block mt-1 ${isRTL ? 'mr-4' : 'ml-4'} hover:bg-teal-50 rounded-lg p-1 transition">
-                    <input type="radio" name="q${globalIdx}" value="${String.fromCharCode(97 + oIdx)}" class="${rs}">
-                    ${lbl.option[oIdx]}) ${opt[currentLang]}</label>`;
-            });
-            html += `<div class="answer-box text-green-700 mt-2 font-medium ${answersVisible ? '' : 'hidden'} bg-green-50 rounded-lg p-2">
-                ${lbl.answer} ${lbl.option[q.correct]}) ${q.options[q.correct][currentLang]} — ${q.answer[currentLang]}</div></li>`;
-            globalIdx++;
-        });
-        html += `</ol></section>`;
-    });
-    container.innerHTML = html;
+const container = document.getElementById('exam-content');
+const labels = { ar: { option: ['أ', 'ب', 'ج', 'د'], answer: '✅ الإجابة:' }, en: { option: ['A', 'B', 'C', 'D'], answer: '✅ Answer:' } };
+const lbl = labels[currentLang]; const isRTL = currentLang === 'ar';
+let html = ''; let globalIdx = 0;
+examData.sections.forEach((section) => {
+html += `<section class="bg-white p-6 rounded-2xl shadow-lg border-2 border-purple-100">
+<h2 class="text-xl font-bold mb-4 text-purple-700">${section.title[currentLang]}</h2>
+<ol class="space-y-4 text-sm">`;
+section.questions.forEach((q) => {
+const bs = isRTL ? 'border-r-4 pr-4' : 'border-l-4 pl-4';
+html += `<li class="${bs} border-purple-400 py-2" id="q-${globalIdx}">
+<strong>${globalIdx + 1}.</strong> ${q.q[currentLang]}<br>`;
+q.options.forEach((opt, oIdx) => {
+const rs = isRTL ? 'mr-4 ml-2' : 'ml-4 mr-2';
+html += `<label class="cursor-pointer block mt-1 ${isRTL ? 'mr-4' : 'ml-4'} hover:bg-purple-50 rounded-lg p-1 transition">
+<input type="radio" name="q${globalIdx}" value="${String.fromCharCode(97 + oIdx)}" class="${rs}">
+${lbl.option[oIdx]}) ${opt[currentLang]}</label>`;
+});
+html += `<div class="answer-box text-green-700 mt-2 font-medium ${answersVisible ? '' : 'hidden'} bg-green-50 rounded-lg p-2">
+${lbl.answer} ${lbl.option[q.correct]}) ${q.options[q.correct][currentLang]} — ${q.answer[currentLang]}</div></li>`;
+globalIdx++;
+});
+html += `</ol></section>`;
+});
+container.innerHTML = html;
 }
-
 function startTimer() {
-    updateTimerDisplay();
-    timerInterval = setInterval(() => {
-        timeRemaining--; updateTimerDisplay();
-        if (timeRemaining % 60 === 0) saveState(false);
-        if (timeRemaining <= 600) document.getElementById('timer').classList.add('timer-warning');
-        if (timeRemaining <= 0) {
-            clearInterval(timerInterval);
-            alert(currentLang === 'ar' ? "⏰ انتهى الوقت!" : "⏰ Time's up!");
-            gradeExam();
-        }
-    }, 1000);
+updateTimerDisplay();
+timerInterval = setInterval(() => {
+timeRemaining--; updateTimerDisplay();
+if (timeRemaining % 60 === 0) saveState(false);
+if (timeRemaining <= 600) document.getElementById('timer').classList.add('timer-warning');
+if (timeRemaining <= 0) {
+clearInterval(timerInterval);
+alert(currentLang === 'ar' ? "⏰ انتهى الوقت!" : "⏰ Time's up!");
+gradeExam();
 }
-
+}, 1000);
+}
 function updateTimerDisplay() {
-    const m = Math.floor(timeRemaining / 60); const s = timeRemaining % 60;
-    document.getElementById('timer').textContent = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+const m = Math.floor(timeRemaining / 60); const s = timeRemaining % 60;
+document.getElementById('timer').textContent = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
 }
-
 function toggleAnswers() {
-    answersVisible = !answersVisible;
-    document.querySelectorAll('.answer-box').forEach(el => el.classList.toggle('hidden', !answersVisible));
-    saveState(false);
+answersVisible = !answersVisible;
+document.querySelectorAll('.answer-box').forEach(el => el.classList.toggle('hidden', !answersVisible));
+saveState(false);
 }
-
 function gradeExam() {
-    let correctCount = 0;
-    const sectionScores = new Array(TOTAL_SECTIONS).fill(0);
-    for (let i = 0; i < TOTAL_QUESTIONS; i++) {
-        const sel = document.querySelector(`input[name="q${i}"]:checked`);
-        const li = document.getElementById(`q-${i}`);
-        if (li) {
-            const isCorrect = sel && sel.value === correctAnswersMap[i];
-            if (isCorrect) { correctCount++; li.classList.add('correct'); li.classList.remove('incorrect'); sectionScores[Math.floor(i / QUESTIONS_PER_SECTION)]++; }
-            else { li.classList.add('incorrect'); li.classList.remove('correct'); }
-        }
-    }
-    const score = Math.round((correctCount / TOTAL_QUESTIONS) * 100);
-    document.getElementById('res-total').textContent = `${score} / 100`;
-    document.getElementById('res-name').textContent = document.getElementById('studentName').value || (currentLang === 'ar' ? 'بطل' : 'Champion');
-    document.getElementById('res-date').textContent = new Date().toLocaleDateString(currentLang === 'ar' ? 'ar-AE' : 'en-US');
-    const pc = document.getElementById('sections-performance'); pc.innerHTML = '';
-    examData.sections.forEach((s, idx) => {
-        pc.innerHTML += `<div class="flex justify-between items-center"><span class="text-gray-700">${s.title[currentLang]}</span><span class="font-bold text-teal-700">${sectionScores[idx]}/${QUESTIONS_PER_SECTION}</span></div>`;
-    });
-    const badge = document.getElementById('success-badge');
-    document.getElementById('success-percent').textContent = `${score}%`;
-    if (currentLang === 'ar') {
-        if (score >= 90) { badge.textContent = '🌟 ممتاز جداً!'; badge.className = 'success-badge grade-excellent'; }
-        else if (score >= 75) { badge.textContent = '👏 ممتاز!'; badge.className = 'success-badge grade-good'; }
-        else if (score >= 50) { badge.textContent = '👍 جيد'; badge.className = 'success-badge grade-pass'; }
-        else { badge.textContent = '💪 حاول مرة أخرى'; badge.className = 'success-badge grade-fail'; }
-    } else {
-        if (score >= 90) { badge.textContent = '🌟 Outstanding!'; badge.className = 'success-badge grade-excellent'; }
-        else if (score >= 75) { badge.textContent = '👏 Excellent!'; badge.className = 'success-badge grade-good'; }
-        else if (score >= 50) { badge.textContent = '👍 Good'; badge.className = 'success-badge grade-pass'; }
-        else { badge.textContent = '💪 Try Again'; badge.className = 'success-badge grade-fail'; }
-    }
-    document.getElementById('results-panel').classList.remove('hidden');
-    document.getElementById('results-panel').scrollIntoView({ behavior: 'smooth' });
-    if (timerInterval) clearInterval(timerInterval);
+let correctCount = 0;
+const sectionScores = new Array(TOTAL_SECTIONS).fill(0);
+for (let i = 0; i < TOTAL_QUESTIONS; i++) {
+const sel = document.querySelector(`input[name="q${i}"]:checked`);
+const li = document.getElementById(`q-${i}`);
+if (li) {
+const isCorrect = sel && sel.value === correctAnswersMap[i];
+if (isCorrect) {
+correctCount++;
+li.classList.add('correct');
+li.classList.remove('incorrect');
+sectionScores[Math.floor(i / QUESTIONS_PER_SECTION)]++;
 }
-
+else { li.classList.add('incorrect'); li.classList.remove('correct'); }
+}
+}
+const score = Math.round((correctCount / TOTAL_QUESTIONS) * 100);
+document.getElementById('res-total').textContent = `${score} / 100`;
+document.getElementById('res-name').textContent = document.getElementById('studentName').value || (currentLang === 'ar' ? 'بطل' : 'Champion');
+document.getElementById('res-date').textContent = new Date().toLocaleDateString(currentLang === 'ar' ? 'ar-AE' : 'en-US');
+const pc = document.getElementById('sections-performance'); pc.innerHTML = '';
+examData.sections.forEach((s, idx) => {
+pc.innerHTML += `<div class="flex justify-between items-center"><span class="text-gray-700">${s.title[currentLang]}</span><span class="font-bold text-purple-700">${sectionScores[idx]}/${QUESTIONS_PER_SECTION}</span></div>`;
+});
+const badge = document.getElementById('success-badge');
+document.getElementById('success-percent').textContent = `${score}%`;
+if (currentLang === 'ar') {
+if (score >= 90) { badge.textContent = '🌟 ممتاز جداً!'; badge.className = 'success-badge grade-excellent'; }
+else if (score >= 75) { badge.textContent = '👏 ممتاز!'; badge.className = 'success-badge grade-good'; }
+else if (score >= 50) { badge.textContent = '👍 جيد'; badge.className = 'success-badge grade-pass'; }
+else { badge.textContent = '💪 حاول مرة أخرى'; badge.className = 'success-badge grade-fail'; }
+} else {
+if (score >= 90) { badge.textContent = '🌟 Outstanding!'; badge.className = 'success-badge grade-excellent'; }
+else if (score >= 75) { badge.textContent = '👏 Excellent!'; badge.className = 'success-badge grade-good'; }
+else if (score >= 50) { badge.textContent = '👍 Good'; badge.className = 'success-badge grade-pass'; }
+else { badge.textContent = '💪 Try Again'; badge.className = 'success-badge grade-fail'; }
+}
+document.getElementById('results-panel').classList.remove('hidden');
+document.getElementById('results-panel').scrollIntoView({ behavior: 'smooth' });
+if (timerInterval) clearInterval(timerInterval);
+}
 function sendResultsToEmail() {
-    const btn = document.getElementById('sendEmailBtn');
-    const status = document.getElementById('emailStatus');
-    btn.disabled = true;
-    btn.textContent = currentLang === 'ar' ? '⏳ جاري الإرسال...' : ' Sending...';
-    const name = document.getElementById('studentName').value || 'N/A';
-    const studentClass = document.getElementById('studentClass').value || 'N/A';
-    const date = document.getElementById('examDate').value || new Date().toLocaleDateString();
-    const score = document.getElementById('res-total').textContent;
-    const successRate = document.getElementById('success-percent').textContent;
-    const badge = document.getElementById('success-badge').textContent;
-    let questionsHTML = ''; let globalIdx = 0;
-    examData.sections.forEach((section, sectionIdx) => {
-        questionsHTML += `<tr style="background:linear-gradient(135deg,#0d9488,#0f766e);color:white;"><td colspan="5" style="padding:12px;font-weight:bold;"> ${currentLang==='ar'?'القسم':'Section'} ${sectionIdx+1}: ${section.title[currentLang]}</td></tr>`;
-        section.questions.forEach((q) => {
-            const sel = document.querySelector(`input[name="q${globalIdx}"]:checked`);
-            const sv = sel ? sel.value : null; const cv = correctAnswersMap[globalIdx]; const ic = sv === cv;
-            let sat = currentLang==='ar'?'❌ لم يجب':'❌ No answer'; let sac = '#dc2626';
-            if (sv) { const si = sv.charCodeAt(0)-97; sat = q.options[si][currentLang]; sac = ic?'#059669':'#dc2626'; }
-            const cat = q.options[q.correct][currentLang];
-            const rb = ic?'#f0fdf4':'#fef2f2'; const bl = ic?'4px solid #10b981':'4px solid #ef4444';
-            questionsHTML += `<tr style="background:${rb};border-right:${bl};"><td style="padding:10px;border:1px solid #e5e7eb;text-align:center;font-weight:bold;">${globalIdx+1}</td><td style="padding:10px;border:1px solid #e5e7eb;"><strong style="color:#0f766e;">${currentLang==='ar'?'❓ السؤال:':'❓ Question:'}</strong><br><span style="font-size:13px;">${q.q[currentLang]}</span></td><td style="padding:10px;border:1px solid #e5e7eb;"><strong style="color:${sac};">${currentLang==='ar'?'✍️ إجابة الطالب:':'✍️ Student:'}</strong><br><span style="color:${sac};font-size:13px;">${sat}</span></td><td style="padding:10px;border:1px solid #e5e7eb;"><strong style="color:#059669;">${currentLang==='ar'?'✅ الصحيحة:':'✅ Correct:'}</strong><br><span style="color:#059669;font-size:13px;">${cat}</span></td><td style="padding:10px;border:1px solid #e5e7eb;text-align:center;">${ic?'<span style="font-size:24px;">✅</span>':'<span style="font-size:24px;">❌</span>'}</td></tr>`;
-            globalIdx++;
-        });
-    });
-    const answersHTML = `<div style="font-family:'Segoe UI',Tahoma,Arial;direction:${currentLang==='ar'?'rtl':'ltr'};"><div style="background:linear-gradient(135deg,#0d9488,#0f766e);color:white;padding:20px;border-radius:10px 10px 0 0;text-align:center;"><h2 style="margin:0;">${currentLang==='ar'?'نتيجة امتحان تحليل الدوال':'Function Analysis Exam Result'}</h2><p style="margin:5px 0 0;opacity:0.9;">Grade 11 Advanced - Mathematics</p></div><div style="background:#f0fdfa;padding:15px;"><table style="width:100%;border-collapse:collapse;"><tr><td style="padding:8px;font-weight:bold;color:#0f766e;">${currentLang==='ar'?'😊 الاسم:':'😊 Name:'}</td><td style="padding:8px;">${name}</td><td style="padding:8px;font-weight:bold;color:#0f766e;">${currentLang==='ar'?' الشعبة:':'🏫 Class:'}</td><td style="padding:8px;">${studentClass}</td></tr><tr><td style="padding:8px;font-weight:bold;color:#0f766e;">${currentLang==='ar'?'📅 التاريخ:':'📅 Date:'}</td><td style="padding:8px;">${date}</td><td style="padding:8px;font-weight:bold;color:#0f766e;">${currentLang==='ar'?'🏆 التقدير:':'🏆 Grade:'}</td><td style="padding:8px;">${badge}</td></tr></table></div><div style="background:white;padding:20px;text-align:center;"><div style="display:inline-block;margin:0 15px;"><div style="font-size:32px;font-weight:bold;color:#0d9488;">${score}</div><div style="color:#6b7280;font-size:13px;">${currentLang==='ar'?'الدرجة':'Score'}</div></div><div style="display:inline-block;margin:0 15px;"><div style="font-size:32px;font-weight:bold;color:#059669;">${successRate}%</div><div style="color:#6b7280;font-size:13px;">${currentLang==='ar'?'النسبة':'Rate'}</div></div></div><table style="width:100%;border-collapse:collapse;font-size:13px;"><thead><tr style="background:#0d9488;color:white;"><th style="padding:10px;border:1px solid #0f766e;">#</th><th style="padding:10px;border:1px solid #0f766e;">${currentLang==='ar'?'السؤال':'Question'}</th><th style="padding:10px;border:1px solid #0f766e;">${currentLang==='ar'?'إجابة الطالب':'Student'}</th><th style="padding:10px;border:1px solid #0f766e;">${currentLang==='ar'?'الصحيحة':'Correct'}</th><th style="padding:10px;border:1px solid #0f766e;">${currentLang==='ar'?'النتيجة':'Result'}</th></tr></thead><tbody>${questionsHTML}</tbody></table><div style="background:linear-gradient(135deg,#f0fdfa,#ccfbf1);padding:15px;border-radius:0 0 10px 10px;"><p style="margin:0;color:#0f766e;text-align:center;">📈 <strong>${currentLang==='ar'?'أحسنت يا بطل! استمر في إتقان الرياضيات!':'Great job! Keep mastering Mathematics!'}</strong> 📈</p><p style="margin:5px 0 0;color:#0f766e;text-align:center;font-size:12px;">${currentLang==='ar'?'تم الإرسال تلقائياً | Mr. Mohammed Hesham':'Auto-sent | Mr. Mohammed Hesham'}</p></div></div>`;
-    emailjs.send(SERVICE_ID, TEMPLATE_ID, { to_email: TARGET_EMAIL, student_name: name, student_class: studentClass, exam_date: date, total_score: score, success_rate: successRate, grade: badge, answers_table: answersHTML }).then(() => {
-        status.textContent = currentLang==='ar'?'✅ تم الإرسال بنجاح!':'✅ Sent successfully!'; status.style.color = '#059669'; btn.textContent = currentLang==='ar'?'✓ تم':'✓ Sent';
-    }).catch(err => {
-        status.textContent = currentLang==='ar'?'❌ حدث خطأ':'❌ Error'; status.style.color = '#dc2626'; btn.disabled = false; btn.textContent = currentLang==='ar'?'📧 حاول مرة أخرى':'📧 Try Again'; console.error(err);
-    });
+const btn = document.getElementById('sendEmailBtn');
+const status = document.getElementById('emailStatus');
+btn.disabled = true;
+btn.textContent = currentLang === 'ar' ? '⏳ جاري الإرسال...' : '⏳ Sending...';
+const name = document.getElementById('studentName').value || 'N/A';
+const studentClass = document.getElementById('studentClass').value || 'N/A';
+const date = document.getElementById('examDate').value || new Date().toLocaleDateString();
+const score = document.getElementById('res-total').textContent;
+const successRate = document.getElementById('success-percent').textContent;
+const badge = document.getElementById('success-badge').textContent;
+let questionsHTML = ''; let globalIdx = 0;
+examData.sections.forEach((section, sectionIdx) => {
+questionsHTML += `<tr style="background:linear-gradient(135deg,#7c3aed,#ec4899);color:white;"><td colspan="5" style="padding:12px;font-weight:bold;">📌 ${currentLang==='ar'?'القسم':'Section'} ${sectionIdx+1}: ${section.title[currentLang]}</td></tr>`;
+section.questions.forEach((q) => {
+const sel = document.querySelector(`input[name="q${globalIdx}"]:checked`);
+const sv = sel ? sel.value : null; const cv = correctAnswersMap[globalIdx]; const ic = sv === cv;
+let sat = currentLang==='ar'?'❌ لم يجب':'❌ No answer'; let sac = '#dc2626';
+if (sv) { const si = sv.charCodeAt(0)-97; sat = q.options[si][currentLang]; sac = ic?'#059669':'#dc2626'; }
+const cat = q.options[q.correct][currentLang];
+const rb = ic?'#f0fdf4':'#fef2f2'; const bl = ic?'4px solid #10b981':'4px solid #ef4444';
+questionsHTML += `<tr style="background:${rb};border-right:${bl};"><td style="padding:10px;border:1px solid #e5e7eb;text-align:center;font-weight:bold;">${globalIdx+1}</td><td style="padding:10px;border:1px solid #e5e7eb;"><strong style="color:#5b21b6;">${currentLang==='ar'?'❓ السؤال:':'❓ Question:'}</strong><br><span style="font-size:13px;">${q.q[currentLang]}</span></td><td style="padding:10px;border:1px solid #e5e7eb;"><strong style="color:${sac};">${currentLang==='ar'?'✍️ إجابة الطالب:':'✍️ Student:'}</strong><br><span style="color:${sac};font-size:13px;">${sat}</span></td><td style="padding:10px;border:1px solid #e5e7eb;"><strong style="color:#059669;">${currentLang==='ar'?'✅ الصحيحة:':'✅ Correct:'}</strong><br><span style="color:#059669;font-size:13px;">${cat}</span></td><td style="padding:10px;border:1px solid #e5e7eb;text-align:center;">${ic?'<span style="font-size:24px;">✅</span>':'<span style="font-size:24px;">❌</span>'}</td></tr>`;
+globalIdx++;
+});
+});
+const answersHTML = `<div style="font-family:'Segoe UI',Tahoma,Arial;direction:${currentLang==='ar'?'rtl':'ltr'};"><div style="background:linear-gradient(135deg,#7c3aed,#ec4899);color:white;padding:20px;border-radius:10px 10px 0 0;text-align:center;"><h2 style="margin:0;">${currentLang==='ar'?'نتيجة امتحان التحليل البياني للدوال':'Graphical Analysis of Functions Exam Result'}</h2><p style="margin:5px 0 0;opacity:0.9;">Grade 11 Advanced - Mathematics</p></div><div style="background:#f5f3ff;padding:15px;"><table style="width:100%;border-collapse:collapse;"><tr><td style="padding:8px;font-weight:bold;color:#5b21b6;">${currentLang==='ar'?'😊 الاسم:':'😊 Name:'}</td><td style="padding:8px;">${name}</td><td style="padding:8px;font-weight:bold;color:#5b21b6;">${currentLang==='ar'?'🏫 الشعبة:':'🏫 Class:'}</td><td style="padding:8px;">${studentClass}</td></tr><tr><td style="padding:8px;font-weight:bold;color:#5b21b6;">${currentLang==='ar'?'📅 التاريخ:':'📅 Date:'}</td><td style="padding:8px;">${date}</td><td style="padding:8px;font-weight:bold;color:#5b21b6;">${currentLang==='ar'?'🏆 التقدير:':'🏆 Grade:'}</td><td style="padding:8px;">${badge}</td></tr></table></div><div style="background:white;padding:20px;text-align:center;"><div style="display:inline-block;margin:0 15px;"><div style="font-size:32px;font-weight:bold;color:#7c3aed;">${score}</div><div style="color:#6b7280;font-size:13px;">${currentLang==='ar'?'الدرجة':'Score'}</div></div><div style="display:inline-block;margin:0 15px;"><div style="font-size:32px;font-weight:bold;color:#059669;">${successRate}%</div><div style="color:#6b7280;font-size:13px;">${currentLang==='ar'?'النسبة':'Rate'}</div></div></div><table style="width:100%;border-collapse:collapse;font-size:13px;"><thead><tr style="background:#7c3aed;color:white;"><th style="padding:10px;border:1px solid #6d28d9;">#</th><th style="padding:10px;border:1px solid #6d28d9;">${currentLang==='ar'?'السؤال':'Question'}</th><th style="padding:10px;border:1px solid #6d28d9;">${currentLang==='ar'?'إجابة الطالب':'Student'}</th><th style="padding:10px;border:1px solid #6d28d9;">${currentLang==='ar'?'الصحيحة':'Correct'}</th><th style="padding:10px;border:1px solid #6d28d9;">${currentLang==='ar'?'النتيجة':'Result'}</th></tr></thead><tbody>${questionsHTML}</tbody></table><div style="background:linear-gradient(135deg,#f5f3ff,#ede9fe);padding:15px;border-radius:0 0 10px 10px;"><p style="margin:0;color:#5b21b6;text-align:center;">📊 <strong>${currentLang==='ar'?'أحسنت يا بطل! استمر في إتقان التحليل البياني!':'Great job! Keep mastering graphical analysis!'}</strong> 📊</p><p style="margin:5px 0 0;color:#5b21b6;text-align:center;font-size:12px;">${currentLang==='ar'?'تم الإرسال تلقائياً | Mr. Mohammed Hesham':'Auto-sent | Mr. Mohammed Hesham'}</p></div></div>`;
+emailjs.send(SERVICE_ID, TEMPLATE_ID, { to_email: TARGET_EMAIL, student_name: name, student_class: studentClass, exam_date: date, total_score: score, success_rate: successRate, grade: badge, answers_table: answersHTML }).then(() => {
+status.textContent = currentLang==='ar'?'✅ تم الإرسال بنجاح!':'✅ Sent successfully!'; status.style.color = '#059669'; btn.textContent = currentLang==='ar'?'✓ تم':'✓ Sent';
+}).catch(err => {
+status.textContent = currentLang==='ar'?'❌ حدث خطأ':'❌ Error'; status.style.color = '#dc2626'; btn.disabled = false; btn.textContent = currentLang==='ar'?'📧 حاول مرة أخرى':'📧 Try Again'; console.error(err);
+});
 }
-
 window.addEventListener('DOMContentLoaded', () => {
-    const saved = loadState();
-    if (saved && saved.seed) {
-        currentSeed = saved.seed; currentLang = saved.lang || 'ar';
-        timeRemaining = saved.timeRemaining !== undefined ? saved.timeRemaining : TOTAL_TIME;
-        answersVisible = saved.answersVisible || false;
-        document.documentElement.lang = currentLang;
-        document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
-        document.getElementById('btn-ar').classList.toggle('active', currentLang === 'ar');
-        document.getElementById('btn-en').classList.toggle('active', currentLang === 'en');
-        document.body.classList.toggle('en-mode', currentLang === 'en');
-        document.querySelectorAll('[data-ar][data-en]').forEach(el => { el.innerHTML = currentLang === 'ar' ? el.getAttribute('data-ar') : el.getAttribute('data-en'); });
-    } else { currentSeed = Date.now(); }
-    prepareShuffledExam(); renderExam();
-    if (saved) {
-        if (saved.studentName) document.getElementById('studentName').value = saved.studentName;
-        if (saved.studentClass) document.getElementById('studentClass').value = saved.studentClass;
-        if (saved.examDate) document.getElementById('examDate').value = saved.examDate;
-        if (saved.answers) restoreAnswers(saved.answers);
-    }
-    setupAnswerListeners(); setupInputListeners(); startTimer();
+const saved = loadState();
+if (saved && saved.seed) {
+currentSeed = saved.seed; currentLang = saved.lang || 'ar';
+timeRemaining = saved.timeRemaining !== undefined ? saved.timeRemaining : TOTAL_TIME;
+answersVisible = saved.answersVisible || false;
+document.documentElement.lang = currentLang;
+document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+document.getElementById('btn-ar').classList.toggle('active', currentLang === 'ar');
+document.getElementById('btn-en').classList.toggle('active', currentLang === 'en');
+document.body.classList.toggle('en-mode', currentLang === 'en');
+document.querySelectorAll('[data-ar][data-en]').forEach(el => { el.innerHTML = currentLang === 'ar' ? el.getAttribute('data-ar') : el.getAttribute('data-en'); });
+} else { currentSeed = Date.now(); }
+prepareShuffledExam(); renderExam();
+if (saved) {
+if (saved.studentName) document.getElementById('studentName').value = saved.studentName;
+if (saved.studentClass) document.getElementById('studentClass').value = saved.studentClass;
+if (saved.examDate) document.getElementById('examDate').value = saved.examDate;
+if (saved.answers) restoreAnswers(saved.answers);
+}
+setupAnswerListeners(); setupInputListeners(); startTimer();
 });
 window.addEventListener('beforeunload', () => saveState(false));
 </script>
